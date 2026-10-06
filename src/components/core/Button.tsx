@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { ActivityIndicator, Pressable, type PressableProps, type ViewStyle } from 'react-native';
 
 import { useTheme, type ControlSize } from '@/theme';
 
 import { Text, type TextColor, type TextProps } from './Text';
+import { useFocusRing } from './useFocusRing';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'destructive';
 export type ButtonSize = ControlSize;
@@ -41,8 +41,7 @@ export function Button({
   ...rest
 }: ButtonProps) {
   const { colors, space, radius, touchTarget, controlHeight, borderWidth } = useTheme();
-  // Focus ring: shown for keyboard / switch-control users (web, Android, iPad keyboards).
-  const [focused, setFocused] = useState(false);
+  const { handlers, ringStyle } = useFocusRing(onFocus, onBlur);
 
   const height = controlHeight[size];
   // Small buttons look compact but still get a 48pt tappable area.
@@ -79,36 +78,28 @@ export function Button({
       disabled={disabled}
       hitSlop={hitSlop ?? { top: slop, bottom: slop }}
       onPress={loading ? undefined : onPress}
-      onFocus={(e) => {
-        setFocused(true);
-        onFocus?.(e);
-      }}
-      onBlur={(e) => {
-        setFocused(false);
-        onBlur?.(e);
-      }}
+      {...handlers}
       style={({ pressed }): ViewStyle => ({
-        height,
+        // minHeight, not height: at large text sizes the button must grow, not clip its label.
+        minHeight: height,
         minWidth: touchTarget,
         alignSelf: fullWidth ? 'stretch' : 'flex-start',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         gap: space[2],
+        paddingVertical: space[2],
         paddingHorizontal: size === 'small' ? space[4] : size === 'medium' ? space[6] : space[8],
         borderRadius: radius.md,
         backgroundColor: background(pressed),
         borderWidth: variant === 'secondary' ? borderWidth.medium : borderWidth.none,
         borderColor: disabled ? colors.border.default : outlineColor,
-        outlineWidth: focused ? borderWidth.medium : borderWidth.none,
-        outlineColor: colors.border.focus,
-        outlineOffset: 2,
-        outlineStyle: 'solid',
+        ...ringStyle,
       })}
       {...rest}
     >
       {loading ? <ActivityIndicator color={spinnerColor} /> : null}
-      <Text variant={LABEL_VARIANT[size]} color={labelColor}>
+      <Text variant={LABEL_VARIANT[size]} color={labelColor} style={{ flexShrink: 1, textAlign: 'center' }}>
         {title}
       </Text>
     </Pressable>

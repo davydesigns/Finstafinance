@@ -12,7 +12,7 @@ export interface MoneyTextProps extends Omit<TextProps, 'children' | 'color'> {
   signDisplay?: SignDisplay;
   /** Hides the figure (privacy mode). A fixed mask is used so the size of the amount isn't leaked. */
   masked?: boolean;
-  /** Colour credits green and debits red. Signs still show, so colour is never the only cue. */
+  /** Colour credits green and debits red. Signs always show too (`never` is upgraded to `always`), so colour is never the only cue. */
   colorBySign?: boolean;
   color?: TextColor;
 }
@@ -23,13 +23,15 @@ export function MoneyText({
   amount,
   currency,
   locale,
-  signDisplay = 'negative',
+  signDisplay: requestedSign = 'negative',
   masked = false,
   colorBySign = false,
   color = 'primary',
   variant = 'money',
   ...rest
 }: MoneyTextProps) {
+  // Colour must never be the only cue for credit vs debit, so colouring forces visible signs.
+  const signDisplay: SignDisplay = colorBySign && requestedSign === 'never' ? 'always' : requestedSign;
   const resolvedColor: TextColor = colorBySign ? (amount > 0 ? 'success' : amount < 0 ? 'danger' : color) : color;
 
   return (

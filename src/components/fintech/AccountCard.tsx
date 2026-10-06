@@ -1,6 +1,6 @@
 import { Pressable, View } from 'react-native';
 
-import { Card, IconTile, Text, type IconName } from '@/components/core';
+import { Card, IconTile, Text, useFocusRing, type IconName } from '@/components/core';
 import { useTheme } from '@/theme';
 import { spokenMoney } from '@/utils/money';
 
@@ -49,7 +49,8 @@ export function AccountCard({
   locale,
   onPress,
 }: AccountCardProps) {
-  const { colors, space } = useTheme();
+  const { colors, space, radius } = useTheme();
+  const { handlers, ringStyle } = useFocusRing();
   const { label: typeLabel, icon } = ACCOUNT_TYPE[accountType];
 
   // Digits are spaced so screen readers say "1 2 3 4", not "one thousand two hundred…".
@@ -65,10 +66,11 @@ export function AccountCard({
   const body = (pressed: boolean) => (
     <Card variant="elevated" padding={5} style={pressed ? { backgroundColor: colors.action.subtle } : undefined}>
       <View style={{ gap: space[4] }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: space[3] }}>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: space[3] }}>
           <IconTile name={icon} />
-          <View style={{ flex: 1 }}>
-            <Text variant="bodyStrong" numberOfLines={1}>
+          {/* flexBasis lets the status badge wrap below the name when text is enlarged. */}
+          <View style={{ flex: 1, flexBasis: space[16] * 2 }}>
+            <Text variant="bodyStrong" numberOfLines={2}>
               {name}
             </Text>
             <Text variant="bodySmall" color="secondary">
@@ -96,7 +98,14 @@ export function AccountCard({
   }
 
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel={spoken} accessibilityHint="Opens account" onPress={onPress}>
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={spoken}
+      accessibilityHint="Opens account"
+      onPress={onPress}
+      style={[{ borderRadius: radius.lg }, ringStyle]}
+      {...handlers}
+    >
       {({ pressed }) => body(pressed)}
     </Pressable>
   );

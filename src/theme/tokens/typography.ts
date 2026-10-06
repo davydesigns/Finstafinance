@@ -43,7 +43,8 @@ export interface TypeStyle {
   fontVariant?: TextStyle['fontVariant'];
   /**
    * Caps how far the user's system text-size setting can scale this style.
-   * Big display text caps low (it is already large); body copy scales a lot.
+   * WCAG asks for text to reach 200%. Everything up to 22pt allows 2x. Only
+   * 28pt+ text caps lower (it is already large text) so layouts survive.
    */
   maxFontSizeMultiplier: number;
 }
@@ -52,18 +53,18 @@ const tabular: TextStyle['fontVariant'] = ['tabular-nums'];
 
 /** Named text styles. Components pick one of these, never raw sizes. */
 export const typography = {
-  display: { fontSize: fontSize[36], lineHeight: lineHeight[36], fontWeight: fontWeight.bold, letterSpacing: -0.5, maxFontSizeMultiplier: 1.2 },
-  heading1: { fontSize: fontSize[28], lineHeight: lineHeight[28], fontWeight: fontWeight.bold, letterSpacing: -0.3, maxFontSizeMultiplier: 1.3 },
-  heading2: { fontSize: fontSize[22], lineHeight: lineHeight[22], fontWeight: fontWeight.semibold, maxFontSizeMultiplier: 1.4 },
-  heading3: { fontSize: fontSize[18], lineHeight: lineHeight[18], fontWeight: fontWeight.semibold, maxFontSizeMultiplier: 1.5 },
-  body: { fontSize: fontSize[16], lineHeight: lineHeight[16], fontWeight: fontWeight.regular, maxFontSizeMultiplier: 1.8 },
-  bodyStrong: { fontSize: fontSize[16], lineHeight: lineHeight[16], fontWeight: fontWeight.semibold, maxFontSizeMultiplier: 1.8 },
-  bodySmall: { fontSize: fontSize[14], lineHeight: lineHeight[14], fontWeight: fontWeight.regular, maxFontSizeMultiplier: 1.8 },
-  label: { fontSize: fontSize[14], lineHeight: lineHeight[14], fontWeight: fontWeight.semibold, maxFontSizeMultiplier: 1.8 },
-  caption: { fontSize: fontSize[12], lineHeight: lineHeight[12], fontWeight: fontWeight.medium, letterSpacing: 0.2, maxFontSizeMultiplier: 1.6 },
+  display: { fontSize: fontSize[36], lineHeight: lineHeight[36], fontWeight: fontWeight.bold, letterSpacing: -0.5, maxFontSizeMultiplier: 1.5 },
+  heading1: { fontSize: fontSize[28], lineHeight: lineHeight[28], fontWeight: fontWeight.bold, letterSpacing: -0.3, maxFontSizeMultiplier: 1.75 },
+  heading2: { fontSize: fontSize[22], lineHeight: lineHeight[22], fontWeight: fontWeight.semibold, maxFontSizeMultiplier: 2 },
+  heading3: { fontSize: fontSize[18], lineHeight: lineHeight[18], fontWeight: fontWeight.semibold, maxFontSizeMultiplier: 2 },
+  body: { fontSize: fontSize[16], lineHeight: lineHeight[16], fontWeight: fontWeight.regular, maxFontSizeMultiplier: 2 },
+  bodyStrong: { fontSize: fontSize[16], lineHeight: lineHeight[16], fontWeight: fontWeight.semibold, maxFontSizeMultiplier: 2 },
+  bodySmall: { fontSize: fontSize[14], lineHeight: lineHeight[14], fontWeight: fontWeight.regular, maxFontSizeMultiplier: 2 },
+  label: { fontSize: fontSize[14], lineHeight: lineHeight[14], fontWeight: fontWeight.semibold, maxFontSizeMultiplier: 2 },
+  caption: { fontSize: fontSize[12], lineHeight: lineHeight[12], fontWeight: fontWeight.medium, letterSpacing: 0.2, maxFontSizeMultiplier: 2 },
   /** Money: tabular numerals keep digits aligned in columns. */
-  moneyLarge: { fontSize: fontSize[36], lineHeight: lineHeight[36], fontWeight: fontWeight.bold, letterSpacing: -0.5, fontVariant: tabular, maxFontSizeMultiplier: 1.2 },
-  money: { fontSize: fontSize[16], lineHeight: lineHeight[16], fontWeight: fontWeight.semibold, fontVariant: tabular, maxFontSizeMultiplier: 1.8 },
+  moneyLarge: { fontSize: fontSize[36], lineHeight: lineHeight[36], fontWeight: fontWeight.bold, letterSpacing: -0.5, fontVariant: tabular, maxFontSizeMultiplier: 1.5 },
+  money: { fontSize: fontSize[16], lineHeight: lineHeight[16], fontWeight: fontWeight.semibold, fontVariant: tabular, maxFontSizeMultiplier: 2 },
 } as const satisfies Record<string, TypeStyle>;
 
 export type TypeVariant = keyof typeof typography;

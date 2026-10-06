@@ -7,3 +7,4 @@ export type { CardProps, CardVariant } from './Card';
 export { Icon } from './Icon';
 export type { IconProps, IconName } from './Icon';
 export { IconTile } from './IconTile';
+export { useFocusRing } from './useFocusRing';

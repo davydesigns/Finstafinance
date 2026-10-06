@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { TextInput, View, type TextInputProps } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { AccessibilityInfo, Platform, Pressable, TextInput, View, type TextInputProps } from 'react-native';
 
 import { Icon, Text } from '@/components/core';
 import { useTheme } from '@/theme';
@@ -39,10 +39,17 @@ export function AmountInput({
 }: AmountInputProps) {
   const { colors, space, radius, typography, borderWidth, controlHeight } = useTheme();
   const [focused, setFocused] = useState(false);
+  const inputRef = useRef<TextInput>(null);
 
   const digits = currencyDigits(currency, locale);
   const symbol = currencySymbol(currency, locale);
   const hasError = Boolean(errorText);
+
+  // A new error must be HEARD, not just seen. iOS needs an explicit announcement;
+  // Android does it through the live region on the error row below.
+  useEffect(() => {
+    if (errorText && Platform.OS === 'ios') AccessibilityInfo.announceForAccessibility(errorText);
+  }, [errorText]);
   // maxFontSizeMultiplier is a prop, not a style, so pull it out.
   const { maxFontSizeMultiplier, ...inputType } = typography.moneyLarge;
 
@@ -53,11 +60,21 @@ export function AmountInput({
 
   return (
     <View style={{ gap: space[2] }}>
-      <Text variant="label" color={editable ? 'primary' : 'disabled'}>
+      {/* Hidden from screen readers: the input's own label already says this. Otherwise it is read twice. */}
+      <Text
+        variant="label"
+        color={editable ? 'primary' : 'disabled'}
+        accessibilityElementsHidden
+        importantForAccessibility="no"
+      >
         {label}
       </Text>
 
-      <View
+      {/* Tapping anywhere in the box focuses the field, not just the digits. */}
+      <Pressable
+        accessible={false}
+        disabled={!editable}
+        onPress={() => inputRef.current?.focus()}
         style={{
           minHeight: controlHeight.large,
           flexDirection: 'row',
@@ -74,6 +91,7 @@ export function AmountInput({
           {symbol}
         </Text>
         <TextInput
+          ref={inputRef}
           value={value}
           onChangeText={(text) => onChangeText(sanitizeAmountInput(text, digits))}
           onFocus={(e) => {
@@ -91,16 +109,20 @@ export function AmountInput({
           placeholderTextColor={colors.text.secondary}
           selectionColor={colors.action.primary}
           maxFontSizeMultiplier={maxFontSizeMultiplier}
-          accessibilityLabel={`${label}, ${currency}`}
-          accessibilityHint={errorText ?? helperText}
+          // The error lives in the LABEL, not the hint: users can switch hints off.
+          accessibilityLabel={`${label}, ${currency}${hasError ? `, error: ${errorText}` : ''}`}
+          accessibilityHint={helperText}
+          autoCorrect={false}
+          autoComplete="off"
+          spellCheck={false}
           accessibilityState={{ disabled: !editable }}
           style={[inputType, { flex: 1, color: editable ? colors.text.primary : colors.text.disabled, paddingVertical: space[3] }]}
           {...rest}
         />
-      </View>
+      </Pressable>
 
       {hasError ? (
-        <View accessibilityRole="alert" style={{ flexDirection: 'row', alignItems: 'center', gap: space[1] }}>
+        <View accessibilityRole="alert" accessibilityLiveRegion="polite" style={{ flexDirection: 'row', alignItems: 'center', gap: space[1] }}>
           <Icon name="alert-circle" size="small" color="danger" />
           <Text variant="bodySmall" color="danger" style={{ flex: 1 }}>
             {errorText}

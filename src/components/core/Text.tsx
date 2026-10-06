@@ -47,6 +47,8 @@ export interface TextProps extends RNTextProps {
  * It applies the type scale, a themed colour, and a cap on how far the
  * user's system text-size setting can scale it (so layouts don't break).
  */
+const HEADINGS: TypeVariant[] = ['heading1', 'heading2', 'heading3'];
+
 export function Text({ variant = 'body', color = 'primary', style, maxFontSizeMultiplier, ...rest }: TextProps) {
   const { colors, typography } = useTheme();
   // `maxFontSizeMultiplier` is a Text prop, not a style, so we pull it out.
@@ -54,6 +56,8 @@ export function Text({ variant = 'body', color = 'primary', style, maxFontSizeMu
 
   return (
     <RNText
+      // Headings are announced as headings so screen-reader users can jump between them.
+      accessibilityRole={HEADINGS.includes(variant) ? 'header' : undefined}
       maxFontSizeMultiplier={maxFontSizeMultiplier ?? defaultCap}
       style={[typeStyle, { color: resolveTextColor(colors, color) }, style]}
       {...rest}

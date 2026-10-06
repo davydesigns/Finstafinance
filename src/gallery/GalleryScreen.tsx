@@ -7,7 +7,16 @@ import { useTheme } from '@/theme';
 /** Shared scaffolding for component gallery screens. Not part of the design system. */
 export function GalleryScreen({ children }: { children: ReactNode }) {
   const { space } = useTheme();
-  return <ScrollView contentContainerStyle={{ padding: space[4], paddingBottom: space[16] }}>{children}</ScrollView>;
+  return (
+    <ScrollView
+      // The iOS decimal keypad has no Done key, so dragging must dismiss it.
+      keyboardDismissMode="on-drag"
+      keyboardShouldPersistTaps="handled"
+      contentContainerStyle={{ padding: space[4], paddingBottom: space[16] }}
+    >
+      {children}
+    </ScrollView>
+  );
 }
 
 export function Section({ title, note, children }: { title: string; note?: string; children: ReactNode }) {

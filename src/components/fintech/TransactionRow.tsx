@@ -1,6 +1,6 @@
 import { Pressable, View } from 'react-native';
 
-import { Icon, IconTile, Text, type IconName } from '@/components/core';
+import { Icon, IconTile, Text, useFocusRing, type IconName } from '@/components/core';
 import { useTheme } from '@/theme';
 import { spokenMoney } from '@/utils/money';
 
@@ -48,6 +48,7 @@ export function TransactionRow({
   onPress,
 }: TransactionRowProps) {
   const { colors, space, touchTarget, radius } = useTheme();
+  const { handlers, ringStyle } = useFocusRing();
   const { label: typeLabel, icon: typeIcon } = TYPE[type];
   const failed = status === 'failed';
 
@@ -80,10 +81,10 @@ export function TransactionRow({
     >
       <IconTile name={icon ?? typeIcon} />
       <View style={{ flex: 1, gap: space[1] }}>
-        <Text variant="bodyStrong" numberOfLines={1}>
+        <Text variant="bodyStrong" numberOfLines={2}>
           {title}
         </Text>
-        <Text variant="bodySmall" color="secondary" numberOfLines={1}>
+        <Text variant="bodySmall" color="secondary" numberOfLines={2}>
           {shortDate} · {typeLabel}
         </Text>
         {status === 'pending' ? <StatusBadge status="pending" label="Pending" /> : null}
@@ -110,7 +111,14 @@ export function TransactionRow({
   }
 
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel={spoken} accessibilityHint="Opens transaction details" onPress={onPress}>
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={spoken}
+      accessibilityHint="Opens transaction details"
+      onPress={onPress}
+      style={[{ borderRadius: radius.md }, ringStyle]}
+      {...handlers}
+    >
       {({ pressed }) => content(pressed)}
     </Pressable>
   );
