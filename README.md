@@ -16,7 +16,7 @@ npm run check            # typecheck + lint + tests (run before every commit)
   The raw `palette` is **not** exported; only `themes.ts` may import it (ESLint enforces this).
 - `src/theme/themes.ts`: semantic roles (`text.primary`, `action.primary`, `status.success.text`) for light and dark.
 - `src/i18n/`: `LocaleProvider` sets locale once; every built-in string can be overridden.
-- `src/components/core/`: Text, Button, Card, Icon, Screen, Stack/Row, PressableSurface, SegmentedControl.
+- `src/components/core/`: Text, Button, Card, Icon, Logo, Screen, Stack/Row, PressableSurface, SegmentedControl.
 - `src/components/fintech/`: MoneyText, StatusBadge, TransactionRow, AccountCard, AmountInput.
 - `src/utils/money.ts`: the `Money` type and formatting. Amounts are **integer minor units** (1250 = $12.50).
 - `src/dev/`: dev-only contrast contract. `src/app/`, `src/gallery/`: the component gallery and demo screens.
@@ -39,3 +39,12 @@ npm run check            # typecheck + lint + tests (run before every commit)
 - Money formatting and parsing unit tests.
 - Contrast contract: every foreground/background pair meets WCAG AA in both themes, **and** every colour token a component reads must appear in a pair (or be listed as exempt).
 - Accessibility behaviour: labels, roles, states, loading/disabled, error announcements.
+
+## Brand
+
+The Davy Designs mark is a single traced vector (`src/components/core/logoPath.ts`) drawn by `<Logo>`.
+Pick the colour for the surface it sits on: `primary` (page or card), `brand` (headers, heroes),
+`secondary` (footers), `inverse` (on brand-blue fills). Every option follows light/dark mode and uses
+a token that is already in the contrast contract. Use `decorative` when the brand name is announced
+next to it, and `showName` for the lockup. App icon, adaptive icon, favicon and splash in `assets/`
+are generated from the same vector (white mark on brand blue `#2557BD`).

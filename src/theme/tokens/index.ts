@@ -12,5 +12,5 @@ export { elevation } from './elevation';
 export type { ElevationToken } from './elevation';
 export { touchTarget, controlHeight } from './interaction';
 export type { ControlSize } from './interaction';
-export { size, iconSize, breakpoint, breakpointFor } from './size';
-export type { IconSize, Breakpoint } from './size';
+export { size, iconSize, logoHeight, breakpoint, breakpointFor } from './size';
+export type { IconSize, LogoSize, Breakpoint } from './size';

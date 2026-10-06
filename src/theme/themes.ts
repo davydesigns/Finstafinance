@@ -3,7 +3,7 @@ import { elevation } from './tokens/elevation';
 import { borderWidth } from './tokens/border';
 import { controlHeight, touchTarget } from './tokens/interaction';
 import { radius } from './tokens/radius';
-import { iconSize, size } from './tokens/size';
+import { iconSize, logoHeight, size } from './tokens/size';
 import { space } from './tokens/spacing';
 import { typography } from './tokens/typography';
 
@@ -152,9 +152,10 @@ export interface Theme {
   controlHeight: typeof controlHeight;
   size: typeof size;
   iconSize: typeof iconSize;
+  logoHeight: typeof logoHeight;
 }
 
-const shared = { space, radius, typography, borderWidth, elevation, touchTarget, controlHeight, size, iconSize };
+const shared = { space, radius, typography, borderWidth, elevation, touchTarget, controlHeight, size, iconSize, logoHeight };
 
 export const lightTheme: Theme = { name: 'light', colors: light, ...shared };
 export const darkTheme: Theme = { name: 'dark', colors: dark, ...shared };

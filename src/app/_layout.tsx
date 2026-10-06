@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
+import { Logo } from '@/components/core';
 import { LocaleProvider } from '@/i18n';
 import { ThemeProvider, useTheme } from '@/theme';
 
@@ -17,7 +18,10 @@ function ThemedStack() {
           contentStyle: { backgroundColor: colors.background.primary },
         }}
       >
-        <Stack.Screen name="index" options={{ title: 'Design system' }} />
+        <Stack.Screen
+          name="index"
+          options={{ title: 'Davy Designs', headerTitle: () => <Logo size="small" color="primary" showName /> }}
+        />
         <Stack.Screen name="accounts" options={{ title: 'Accounts' }} />
         <Stack.Screen name="foundations" options={{ title: 'Foundations' }} />
         <Stack.Screen name="gallery" options={{ title: 'Gallery' }} />

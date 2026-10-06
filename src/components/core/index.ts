@@ -7,6 +7,8 @@ export type { CardProps, CardVariant, CardPadding } from './Card';
 export { Icon } from './Icon';
 export type { IconProps, IconName } from './Icon';
 export { IconTile } from './IconTile';
+export { Logo, BRAND_NAME } from './Logo';
+export type { LogoProps, LogoColor } from './Logo';
 export { Stack, Row } from './Stack';
 export { Screen } from './Screen';
 export { PressableSurface } from './PressableSurface';

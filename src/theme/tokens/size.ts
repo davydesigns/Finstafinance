@@ -31,6 +31,15 @@ export function breakpointFor(width: number): Breakpoint {
   return 'compact';
 }
 
+/** Logo heights in points. Width follows from the artwork's proportions. */
+export const logoHeight = {
+  small: 24,
+  medium: 40,
+  large: 64,
+} as const;
+
+export type LogoSize = keyof typeof logoHeight;
+
 /** Icon glyph sizes. */
 export const iconSize = {
   small: 16,

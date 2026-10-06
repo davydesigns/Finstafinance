@@ -1,7 +1,9 @@
-import { Button, Card, Row, Stack, Text, type ButtonSize, type ButtonVariant, type CardPadding, type CardVariant, type TextColor, type Tone } from '@/components/core';
+import { View } from 'react-native';
+
+import { Button, Card, Logo, Row, Stack, Text, type ButtonSize, type ButtonVariant, type CardPadding, type CardVariant, type LogoColor, type TextColor, type Tone } from '@/components/core';
 import { GalleryScreen, Section } from '@/gallery/GalleryScreen';
 import { ThemeSwitcher } from '@/gallery/ThemeSwitcher';
-import { useTheme, type TextVariant } from '@/theme';
+import { useTheme, type LogoSize, type TextVariant } from '@/theme';
 
 const TEXT_VARIANTS: TextVariant[] = ['heading1', 'heading2', 'heading3', 'body', 'bodyStrong', 'bodySmall', 'label', 'caption'];
 const TEXT_COLORS: TextColor[] = ['primary', 'secondary', 'link', 'disabled'];
@@ -11,10 +13,17 @@ const BUTTON_SIZES: ButtonSize[] = ['small', 'medium', 'large'];
 const CARD_VARIANTS: CardVariant[] = ['default', 'elevated', 'outlined'];
 const CARD_PADDINGS: CardPadding[] = ['sm', 'md', 'xl'];
 
+const LOGO_SIZES: LogoSize[] = ['small', 'medium', 'large'];
+const LOGO_COLORS: { color: LogoColor; note: string }[] = [
+  { color: 'primary', note: 'Default. Ink on the page or a card.' },
+  { color: 'brand', note: 'Brand blue, for headers and hero areas.' },
+  { color: 'secondary', note: 'Quiet, for footers.' },
+];
+
 const noop = () => undefined;
 
 export default function DesignSystemGallery() {
-  const { space } = useTheme();
+  const { space, colors, radius } = useTheme();
 
   return (
     <GalleryScreen>
@@ -23,6 +32,36 @@ export default function DesignSystemGallery() {
       <Stack style={{ marginTop: space[4] }}>
         <ThemeSwitcher />
       </Stack>
+
+      {/* LOGO */}
+      <Section title="Logo: sizes" note="A vector, so it stays sharp at any size and adapts to light and dark.">
+        <Row gap={6} wrap>
+          {LOGO_SIZES.map((size) => (
+            <Logo key={size} size={size} />
+          ))}
+        </Row>
+      </Section>
+      <Section title="Logo: colours" note="Each colour is contrast-checked for the surface it is meant for, in both themes.">
+        <Stack gap={4}>
+          {LOGO_COLORS.map(({ color, note }) => (
+            <Stack key={color} gap={1}>
+              <Logo color={color} />
+              <Text variant="caption" color="secondary">
+                {color}: {note}
+              </Text>
+            </Stack>
+          ))}
+          <View style={{ backgroundColor: colors.action.primary, borderRadius: radius.lg, padding: space[5] }}>
+            <Logo color="inverse" showName />
+          </View>
+          <Text variant="caption" color="secondary">
+            inverse: for filled brand surfaces.
+          </Text>
+        </Stack>
+      </Section>
+      <Section title="Logo: with name" note="The group is announced once as 'Davy Designs'. The visible text isn't read twice.">
+        <Logo showName size="large" color="brand" />
+      </Section>
 
       {/* TEXT */}
       <Section title="Text: variants" note="Each variant caps how far system text scaling can grow it.">
