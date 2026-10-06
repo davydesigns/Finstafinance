@@ -88,14 +88,40 @@ export function spokenMoney(
   return body;
 }
 
+// Group and decimal separators differ by locale ("1,234.50" vs "1.234,50"), so ask Intl.
+const separators = new Map<string, { group: string; decimal: string }>();
+
+function localeSeparators(locale: string | undefined): { group: string; decimal: string } {
+  const key = locale ?? '';
+  let found = separators.get(key);
+  if (!found) {
+    const parts = new Intl.NumberFormat(locale).formatToParts(1234567.8);
+    found = {
+      group: parts.find((part) => part.type === 'group')?.value ?? ',',
+      decimal: parts.find((part) => part.type === 'decimal')?.value ?? '.',
+    };
+    separators.set(key, found);
+  }
+  return found;
+}
+
 /**
- * Clean up what a user types into an amount field: digits and one decimal
- * point only, no more decimals than the currency allows. Accepts "," as a
- * decimal separator and normalises it to ".".
+ * Clean up what a user types or pastes into an amount field: digits and one
+ * decimal point only, no more decimals than the currency allows.
+ * The locale decides what "," and "." mean: in en-US "1,234.50" is one thousand
+ * two hundred thirty-four and a half; in de-DE "1.234,50" is the same amount.
+ * The result always uses "." as the decimal point.
  */
-export function sanitizeAmountInput(text: string, digits: number): string {
-  const cleaned = text.replace(',', '.').replace(/[^0-9.]/g, '');
-  const [whole, ...rest] = cleaned.split('.');
+export function sanitizeAmountInput(text: string, digits: number, locale?: string): string {
+  const { group, decimal } = localeSeparators(locale);
+  const normalised = text
+    .replace(/\s/g, '') // spaces, including the no-break spaces some locales use for grouping
+    .split(group)
+    .join('')
+    .split(decimal)
+    .join('.')
+    .replace(/[^0-9.]/g, '');
+  const [whole, ...rest] = normalised.split('.');
   if (digits === 0 || rest.length === 0) return whole;
   return `${whole}.${rest.join('').slice(0, digits)}`;
 }
@@ -103,7 +129,7 @@ export function sanitizeAmountInput(text: string, digits: number): string {
 /** "12.5" -> { minor: 1250, currency: 'USD' }. Returns null for empty or unparseable text. String-based, so no float drift. */
 export function parseMoney(text: string, currency: string, locale?: string): Money | null {
   const digits = currencyDigits(currency, locale);
-  const clean = sanitizeAmountInput(text, digits);
+  const clean = sanitizeAmountInput(text, digits, locale);
   if (clean === '' || clean === '.') return null;
   const [whole, fraction = ''] = clean.split('.');
   return money(Number(whole || '0') * 10 ** digits + Number(fraction.padEnd(digits, '0') || '0'), currency);

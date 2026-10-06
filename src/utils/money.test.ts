@@ -68,36 +68,49 @@ describe('spokenMoney()', () => {
 
 describe('sanitizeAmountInput()', () => {
   it('keeps digits and one decimal point', () => {
-    expect(sanitizeAmountInput('12ab.3456', 2)).toBe('12.34');
-    expect(sanitizeAmountInput('1.2.3', 2)).toBe('1.23');
-    expect(sanitizeAmountInput('abc', 2)).toBe('');
+    expect(sanitizeAmountInput('12ab.3456', 2, 'en-US')).toBe('12.34');
+    expect(sanitizeAmountInput('1.2.3', 2, 'en-US')).toBe('1.23');
+    expect(sanitizeAmountInput('abc', 2, 'en-US')).toBe('');
   });
 
-  it('normalises a comma decimal separator', () => {
-    expect(sanitizeAmountInput('12,5', 2)).toBe('12.5');
+  it('uses the locale decimal separator and always returns "."', () => {
+    expect(sanitizeAmountInput('12,5', 2, 'de-DE')).toBe('12.5');
+    expect(sanitizeAmountInput('12.5', 2, 'en-US')).toBe('12.5');
+  });
+
+  it('survives pasted amounts with thousands separators (was silently wrong: $1,234.50 became $1.23)', () => {
+    expect(sanitizeAmountInput('$1,234.50', 2, 'en-US')).toBe('1234.50');
+    expect(sanitizeAmountInput('1.234,50', 2, 'de-DE')).toBe('1234.50');
+    expect(sanitizeAmountInput('1\u202f234,50', 2, 'fr-FR')).toBe('1234.50'); // narrow no-break space
+    expect(sanitizeAmountInput('1 234,50 €', 2, 'fr-FR')).toBe('1234.50');
   });
 
   it('allows no decimal point for zero-decimal currencies', () => {
-    expect(sanitizeAmountInput('1200.50', 0)).toBe('1200');
+    expect(sanitizeAmountInput('1200.50', 0, 'en-US')).toBe('1200');
   });
 });
 
 describe('parseMoney()', () => {
   it('parses to exact minor units without float drift', () => {
-    expect(parseMoney('12.5', 'USD')).toEqual(usd(1250));
-    expect(parseMoney('0.1', 'USD')).toEqual(usd(10));
-    expect(parseMoney('0.29', 'USD')).toEqual(usd(29)); // 0.29 * 100 === 28.999999999999996 in floats
-    expect(parseMoney('19.99', 'USD')).toEqual(usd(1999));
+    expect(parseMoney('12.5', 'USD', 'en-US')).toEqual(usd(1250));
+    expect(parseMoney('0.1', 'USD', 'en-US')).toEqual(usd(10));
+    expect(parseMoney('0.29', 'USD', 'en-US')).toEqual(usd(29)); // 0.29 * 100 === 28.999999999999996 in floats
+    expect(parseMoney('19.99', 'USD', 'en-US')).toEqual(usd(1999));
   });
 
   it('handles zero-decimal currencies', () => {
-    expect(parseMoney('1200', 'JPY')).toEqual(money(1200, 'JPY'));
+    expect(parseMoney('1200', 'JPY', 'ja-JP')).toEqual(money(1200, 'JPY'));
+  });
+
+  it('parses pasted values with thousands separators', () => {
+    expect(parseMoney('$1,234.50', 'USD', 'en-US')).toEqual(usd(123450));
+    expect(parseMoney('1.234,50', 'EUR', 'de-DE')).toEqual(money(123450, 'EUR'));
   });
 
   it('returns null for empty or non-numeric input', () => {
-    expect(parseMoney('', 'USD')).toBeNull();
-    expect(parseMoney('.', 'USD')).toBeNull();
-    expect(parseMoney('abc', 'USD')).toBeNull();
+    expect(parseMoney('', 'USD', 'en-US')).toBeNull();
+    expect(parseMoney('.', 'USD', 'en-US')).toBeNull();
+    expect(parseMoney('abc', 'USD', 'en-US')).toBeNull();
   });
 });
 

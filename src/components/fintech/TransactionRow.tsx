@@ -99,7 +99,7 @@ export function TransactionRow({
               {title}
             </Text>
             <Text variant="bodySmall" color="secondary" numberOfLines={2}>
-              {formatDate(date, locale, 'short')} · {label}
+              {[formatDate(date, locale, 'short'), label].filter(Boolean).join(' · ')}
             </Text>
             {status === 'pending' ? <StatusBadge status="pending" label={strings.transaction.pending} /> : null}
             {failed ? <StatusBadge status="danger" label={strings.transaction.failed} /> : null}

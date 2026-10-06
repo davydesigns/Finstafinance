@@ -5,6 +5,7 @@
 export interface Strings {
   money: { hidden: string; plus: string; minus: string };
   input: { error: string };
+  button: { loading: string };
   account: {
     availableBalance: string;
     balanceHidden: string;
@@ -26,6 +27,7 @@ export interface Strings {
 export const defaultStrings: Strings = {
   money: { hidden: 'Amount hidden', plus: 'plus', minus: 'minus' },
   input: { error: 'error' },
+  button: { loading: 'Loading' },
   account: {
     availableBalance: 'Available balance',
     balanceHidden: 'hidden',
@@ -51,6 +53,7 @@ export function mergeStrings(overrides: DeepPartial<Strings> | undefined): Strin
   return {
     money: { ...defaultStrings.money, ...overrides.money },
     input: { ...defaultStrings.input, ...overrides.input },
+    button: { ...defaultStrings.button, ...overrides.button },
     account: {
       ...defaultStrings.account,
       ...overrides.account,

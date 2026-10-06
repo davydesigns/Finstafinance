@@ -1,4 +1,5 @@
 import { fireEvent, screen, userEvent } from '@testing-library/react-native';
+import { AccessibilityInfo } from 'react-native';
 
 import { renderWithProviders } from '@/test/render';
 import { money } from '@/utils/money';
@@ -14,6 +15,14 @@ import { TransactionRow } from './fintech/TransactionRow';
 
 const usd = (minor: number) => money(minor, 'USD');
 const DAY = new Date(2026, 9, 6);
+
+let announce: jest.SpyInstance;
+beforeEach(() => {
+  announce = jest.spyOn(AccessibilityInfo, 'announceForAccessibility').mockImplementation(() => undefined);
+});
+afterEach(() => {
+  announce.mockRestore();
+});
 
 describe('Text', () => {
   it('announces heading variants as headings, and body as plain text', () => {
@@ -62,6 +71,14 @@ describe('Button', () => {
     renderWithProviders(<Button label="Send" onPress={onPress} />);
     await user.press(screen.getByRole('button'));
     expect(onPress).toHaveBeenCalledTimes(1);
+  });
+
+  it('announces once when loading starts, and never when idle', () => {
+    const { rerender } = renderWithProviders(<Button label="Send" onPress={jest.fn()} />);
+    expect(announce).not.toHaveBeenCalled();
+    rerender(<Button label="Send" loading onPress={jest.fn()} />);
+    expect(announce).toHaveBeenCalledWith('Send, Loading');
+    expect(announce).toHaveBeenCalledTimes(1);
   });
 
   it('grows with text instead of clipping (minHeight, not height)', () => {
@@ -147,6 +164,12 @@ describe('TransactionRow', () => {
     expect(Object.assign({}, ...amountStyle.filter(Boolean)).textDecorationLine).toBe('line-through');
   });
 
+  it('omits the date instead of crashing when the date is invalid', () => {
+    renderWithProviders(<TransactionRow title="Shop" date={new Date('garbage')} amount={usd(-100)} type="purchase" />);
+    expect(screen.getByLabelText('Shop, Purchase, minus $1.00')).toBeTruthy();
+    expect(screen.getByText('Purchase')).toBeTruthy();
+  });
+
   it('can be translated through the provider', () => {
     renderWithProviders(<TransactionRow title="Café" date={DAY} amount={usd(-100)} type="purchase" />, {
       strings: { transaction: { types: { purchase: 'Compra' } }, money: { minus: 'menos' } },
@@ -178,6 +201,25 @@ describe('AmountInput', () => {
     renderWithProviders(<AmountInput label="Amount" currency="USD" value="25" onValueChange={jest.fn()} errorText="More than your balance." />);
     expect(screen.getByLabelText('Amount, USD, error: More than your balance.')).toBeTruthy();
     expect(screen.getByRole('alert')).toBeTruthy();
+  });
+
+  it('announces a new error, and stays silent when there is none', () => {
+    const { rerender } = renderWithProviders(<AmountInput label="Amount" currency="USD" value="25" onValueChange={jest.fn()} />);
+    expect(announce).not.toHaveBeenCalled();
+    rerender(<AmountInput label="Amount" currency="USD" value="25" onValueChange={jest.fn()} errorText="More than your balance." />);
+    expect(announce).toHaveBeenCalledWith('More than your balance.');
+  });
+
+  it('cleans a pasted amount with thousands separators', () => {
+    const onValueChange = jest.fn();
+    renderWithProviders(<AmountInput label="Amount" currency="USD" value="" onValueChange={onValueChange} />);
+    fireEvent.changeText(screen.getByLabelText('Amount, USD'), '$1,234.50');
+    expect(onValueChange).toHaveBeenCalledWith('1234.50', { minor: 123450, currency: 'USD' });
+  });
+
+  it('matches the keyboard to the theme', () => {
+    renderWithProviders(<AmountInput label="Amount" currency="USD" value="" onValueChange={jest.fn()} />);
+    expect(screen.getByLabelText('Amount, USD').props.keyboardAppearance).toBe('light');
   });
 
   it('cleans typed text and reports exact Money', () => {

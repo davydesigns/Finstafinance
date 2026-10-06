@@ -5,7 +5,7 @@ import { controlHeight, touchTarget } from './tokens/interaction';
 import { radius } from './tokens/radius';
 import { iconSize, size } from './tokens/size';
 import { space } from './tokens/spacing';
-import { fontSize, fontWeight, lineHeight, typography } from './tokens/typography';
+import { typography } from './tokens/typography';
 
 interface StatusColors {
   /** Text / icon colour. Readable on both `background` and the page surface. */
@@ -73,7 +73,6 @@ export interface SemanticColors {
     /** No judgement: inactive, closed, unknown. */
     neutral: StatusColors;
   };
-  overlay: string;
 }
 
 const light: SemanticColors = {
@@ -105,7 +104,6 @@ const light: SemanticColors = {
     info: { text: p.blue700, background: p.blue50 },
     neutral: { text: p.neutral700, background: p.neutral100 },
   },
-  overlay: 'rgba(14, 18, 26, 0.5)',
 };
 
 const dark: SemanticColors = {
@@ -138,7 +136,6 @@ const dark: SemanticColors = {
     info: { text: p.blue200, background: p.blue900 },
     neutral: { text: p.neutral200, background: p.neutral800 },
   },
-  overlay: 'rgba(0, 0, 0, 0.65)',
 };
 
 export type ThemeName = 'light' | 'dark';
@@ -148,9 +145,6 @@ export interface Theme {
   colors: SemanticColors;
   space: typeof space;
   radius: typeof radius;
-  fontSize: typeof fontSize;
-  lineHeight: typeof lineHeight;
-  fontWeight: typeof fontWeight;
   typography: typeof typography;
   borderWidth: typeof borderWidth;
   elevation: typeof elevation;
@@ -160,7 +154,7 @@ export interface Theme {
   iconSize: typeof iconSize;
 }
 
-const shared = { space, radius, fontSize, lineHeight, fontWeight, typography, borderWidth, elevation, touchTarget, controlHeight, size, iconSize };
+const shared = { space, radius, typography, borderWidth, elevation, touchTarget, controlHeight, size, iconSize };
 
 export const lightTheme: Theme = { name: 'light', colors: light, ...shared };
 export const darkTheme: Theme = { name: 'dark', colors: dark, ...shared };

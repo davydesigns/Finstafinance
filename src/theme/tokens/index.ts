@@ -4,7 +4,7 @@ export { space } from './spacing';
 export type { SpaceToken } from './spacing';
 export { radius } from './radius';
 export type { RadiusToken } from './radius';
-export { fontSize, lineHeight, fontWeight, typography } from './typography';
+export { typography, typographyVariants } from './typography';
 export type { TypeStyle, TypeVariant, TextVariant, MoneyVariant } from './typography';
 export { borderWidth } from './border';
 export type { BorderWidthToken } from './border';

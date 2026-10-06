@@ -5,7 +5,7 @@ import { TextBase } from '@/components/core/Text';
 import { contrastPairs } from '@/dev/contrastPairs';
 import { GalleryScreen, Section } from '@/gallery/GalleryScreen';
 import { ThemeSwitcher } from '@/gallery/ThemeSwitcher';
-import { useTheme, type TypeVariant } from '@/theme';
+import { typographyVariants, useTheme } from '@/theme';
 import { contrastRatio, wcagLevel } from '@/utils/contrast';
 
 /** Foundations gallery, built from the design system's own components and tokens. */
@@ -98,10 +98,9 @@ function Palette() {
 
 function TypeScale() {
   const { typography } = useTheme();
-  const variants = Object.keys(typography) as TypeVariant[];
   return (
     <Stack gap={4}>
-      {variants.map((variant) => {
+      {typographyVariants.map((variant) => {
         const { fontSize, lineHeight, fontWeight } = typography[variant];
         const isMoney = variant === 'money' || variant === 'moneyLarge';
         return (

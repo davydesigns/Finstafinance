@@ -1,5 +1,7 @@
-import { ActivityIndicator, Pressable, type PressableProps, type ViewStyle } from 'react-native';
+import { useEffect } from 'react';
+import { AccessibilityInfo, ActivityIndicator, Platform, Pressable, type PressableProps, type ViewStyle } from 'react-native';
 
+import { useStrings } from '@/i18n';
 import { useTheme, type ControlSize, type TextVariant } from '@/theme';
 
 import { TextBase } from './Text';
@@ -43,6 +45,13 @@ export function Button({
 }: ButtonProps) {
   const { colors, space, radius, touchTarget, controlHeight, borderWidth } = useTheme();
   const { handlers, ringStyle } = useFocusRing(onFocus, onBlur);
+  const strings = useStrings();
+  const spokenLabel = accessibilityLabel ?? label;
+
+  // A spinner means nothing to a screen reader, so say it once when loading starts (iOS; Android reads the busy state).
+  useEffect(() => {
+    if (loading && Platform.OS === 'ios') AccessibilityInfo.announceForAccessibility(`${spokenLabel}, ${strings.button.loading}`);
+  }, [loading, spokenLabel, strings.button.loading]);
 
   const height = controlHeight[size];
   // Small buttons look compact but still get a 48pt tappable area.
@@ -64,7 +73,7 @@ export function Button({
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel ?? label}
+      accessibilityLabel={spokenLabel}
       accessibilityState={{ ...accessibilityState, disabled, busy: loading }}
       disabled={disabled}
       hitSlop={hitSlop ?? { top: slop, bottom: slop }}

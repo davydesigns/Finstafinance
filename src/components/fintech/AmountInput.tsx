@@ -44,7 +44,7 @@ export function AmountInput({
   onBlur,
   ...rest
 }: AmountInputProps) {
-  const { colors, space, radius, typography, borderWidth, controlHeight } = useTheme();
+  const { name, colors, space, radius, typography, borderWidth, controlHeight } = useTheme();
   const locale = useLocale(localeOverride);
   const strings = useStrings();
   const [focused, setFocused] = useState(false);
@@ -104,7 +104,7 @@ export function AmountInput({
           ref={inputRef}
           value={value}
           onChangeText={(text) => {
-            const cleaned = sanitizeAmountInput(text, digits);
+            const cleaned = sanitizeAmountInput(text, digits, locale);
             onValueChange(cleaned, parseMoney(cleaned, currency, locale));
           }}
           onFocus={(e) => {
@@ -116,6 +116,7 @@ export function AmountInput({
             onBlur?.(e);
           }}
           editable={!disabled}
+          keyboardAppearance={name}
           inputMode={digits === 0 ? 'numeric' : 'decimal'}
           keyboardType={digits === 0 ? 'number-pad' : 'decimal-pad'}
           placeholder={placeholder ?? (digits === 0 ? '0' : `0.${'0'.repeat(digits)}`)}

@@ -12,7 +12,10 @@ const LocaleContext = createContext<LocaleContextValue>({ locale: undefined, str
 interface LocaleProviderProps {
   /** BCP 47 tag like 'en-US'. Omit to follow the device. */
   locale?: string;
-  /** Override any built-in string (e.g. to translate). */
+  /**
+   * Override any built-in string (e.g. to translate). Pass a STABLE object (module constant or
+   * memoised): a new object on every render makes every component re-render.
+   */
   strings?: DeepPartial<Strings>;
   children: ReactNode;
 }
