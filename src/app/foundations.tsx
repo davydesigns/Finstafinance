@@ -1,12 +1,11 @@
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 
 import {
   contrastPairs,
   useTheme,
-  useThemePreference,
-  type ThemePreference,
   type TypeVariant,
 } from '@/theme';
+import { ThemeSwitcher } from '@/gallery/ThemeSwitcher';
 import { contrastRatio, wcagLevel } from '@/utils/contrast';
 
 /**
@@ -19,51 +18,11 @@ function SectionTitle({ children }: { children: string }) {
   return (
     <Text
       accessibilityRole="header"
-      maxFontSizeMultiplier={t.title2.maxFontSizeMultiplier}
-      style={[t.title2, { color: colors.text.primary, marginTop: space[8], marginBottom: space[3] }]}
+      maxFontSizeMultiplier={t.heading2.maxFontSizeMultiplier}
+      style={[t.heading2, { color: colors.text.primary, marginTop: space[8], marginBottom: space[3] }]}
     >
       {children}
     </Text>
-  );
-}
-
-const PREFERENCES: ThemePreference[] = ['system', 'light', 'dark'];
-
-function ThemeSwitcher() {
-  const { colors, radius, space, typography: t, touchTarget } = useTheme();
-  const { preference, setPreference } = useThemePreference();
-  return (
-    <View accessibilityRole="radiogroup" style={{ flexDirection: 'row', gap: space[2] }}>
-      {PREFERENCES.map((option) => {
-        const selected = option === preference;
-        return (
-          <Pressable
-            key={option}
-            accessibilityRole="radio"
-            accessibilityState={{ selected }}
-            accessibilityLabel={`${option} theme`}
-            onPress={() => setPreference(option)}
-            style={{
-              flex: 1,
-              minHeight: touchTarget,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: radius.full,
-              backgroundColor: selected ? colors.action.primary : colors.surface.primary,
-              borderWidth: 1,
-              borderColor: selected ? colors.action.primary : colors.border.strong,
-            }}
-          >
-            <Text
-              maxFontSizeMultiplier={t.bodyStrong.maxFontSizeMultiplier}
-              style={[t.bodyStrong, { color: selected ? colors.action.onPrimary : colors.text.primary }]}
-            >
-              {option[0].toUpperCase() + option.slice(1)}
-            </Text>
-          </Pressable>
-        );
-      })}
-    </View>
   );
 }
 
@@ -92,7 +51,7 @@ function ContrastTable() {
               borderColor: colors.border.default,
             }}
           >
-            <Text maxFontSizeMultiplier={t.callout.maxFontSizeMultiplier} style={[t.callout, { flex: 1, color: fg }]}>
+            <Text maxFontSizeMultiplier={t.bodySmall.maxFontSizeMultiplier} style={[t.bodySmall, { flex: 1, color: fg }]}>
               {pair.label}
             </Text>
             {/* Status is conveyed by the word, never colour alone. */}

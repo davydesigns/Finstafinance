@@ -6,6 +6,7 @@ export type TextColor =
   | 'primary'
   | 'secondary'
   | 'disabled'
+  | 'inverse'
   | 'onPrimary'
   | 'link'
   | 'success'
@@ -22,10 +23,12 @@ function resolveColor(colors: SemanticColors, color: TextColor): string {
       return colors.text.secondary;
     case 'disabled':
       return colors.text.disabled;
+    case 'inverse':
+      return colors.text.inverse;
     case 'onPrimary':
       return colors.action.onPrimary;
     case 'link':
-      return colors.action.primary;
+      return colors.text.link;
     default:
       return colors.status[color].text;
   }

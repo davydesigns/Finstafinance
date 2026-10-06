@@ -6,9 +6,7 @@ import { useTheme } from '@/theme';
 
 const ENTRIES: { href: Href; title: string; subtitle: string }[] = [
   { href: '/foundations', title: 'Foundations', subtitle: 'Colour, type, spacing, radius, elevation' },
-  { href: '/components/text', title: 'Text', subtitle: 'Type scale and colour roles' },
-  { href: '/components/button', title: 'Button', subtitle: 'Variants, disabled, loading' },
-  { href: '/components/card', title: 'Card', subtitle: 'Outlined and raised containers' },
+  { href: '/gallery', title: 'Design System Gallery', subtitle: 'Text, Button and Card: every variation' },
 ];
 
 export default function GalleryHome() {
@@ -16,7 +14,7 @@ export default function GalleryHome() {
 
   return (
     <ScrollView contentContainerStyle={{ padding: space[4], gap: space[3] }}>
-      <Text variant="title1" accessibilityRole="header">
+      <Text variant="heading1" accessibilityRole="header">
         Fintech design system
       </Text>
       <Text color="secondary">React Native + Expo. Tokens first, then components.</Text>
@@ -35,7 +33,7 @@ export default function GalleryHome() {
             >
               <Card>
                 <Text variant="bodyStrong">{entry.title}</Text>
-                <Text variant="callout" color="secondary">
+                <Text variant="bodySmall" color="secondary">
                   {entry.subtitle}
                 </Text>
               </Card>

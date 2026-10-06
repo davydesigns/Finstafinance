@@ -14,11 +14,11 @@ export function Section({ title, note, children }: { title: string; note?: strin
   const { space } = useTheme();
   return (
     <View style={{ marginTop: space[8], gap: space[3] }}>
-      <Text variant="title3" accessibilityRole="header">
+      <Text variant="heading3" accessibilityRole="header">
         {title}
       </Text>
       {note ? (
-        <Text variant="callout" color="secondary">
+        <Text variant="bodySmall" color="secondary">
           {note}
         </Text>
       ) : null}

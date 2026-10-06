@@ -1,7 +1,7 @@
 import { palette as p } from './tokens/color';
 import { elevation } from './tokens/elevation';
 import { borderWidth } from './tokens/border';
-import { touchTarget } from './tokens/layout';
+import { controlHeight, touchTarget } from './tokens/layout';
 import { radius } from './tokens/radius';
 import { space } from './tokens/spacing';
 import { fontSize, fontWeight, lineHeight, typography } from './tokens/typography';
@@ -54,6 +54,10 @@ export interface SemanticColors {
     subtle: string;
     onSubtle: string;
     /** Disabled controls are exempt from WCAG contrast rules but stay legible. */
+    /** Solid fill for irreversible or risky actions (cancel transfer, delete). */
+    destructive: string;
+    destructivePressed: string;
+    onDestructive: string;
     disabled: string;
   };
   status: {
@@ -82,6 +86,9 @@ const light: SemanticColors = {
     onPrimary: p.white,
     subtle: p.blue50,
     onSubtle: p.blue800,
+    destructive: p.red700,
+    destructivePressed: p.red900,
+    onDestructive: p.white,
     disabled: p.neutral100,
   },
   status: {
@@ -111,6 +118,9 @@ const dark: SemanticColors = {
     onPrimary: p.blue950,
     subtle: p.blue900,
     onSubtle: p.blue100,
+    destructive: p.red300,
+    destructivePressed: p.red400,
+    onDestructive: p.neutral950,
     disabled: p.neutral800,
   },
   status: {
@@ -136,9 +146,10 @@ export interface Theme {
   borderWidth: typeof borderWidth;
   elevation: typeof elevation;
   touchTarget: number;
+  controlHeight: typeof controlHeight;
 }
 
-const shared = { space, radius, fontSize, lineHeight, fontWeight, typography, borderWidth, elevation, touchTarget };
+const shared = { space, radius, fontSize, lineHeight, fontWeight, typography, borderWidth, elevation, touchTarget, controlHeight };
 
 export const lightTheme: Theme = { name: 'light', colors: light, ...shared };
 export const darkTheme: Theme = { name: 'dark', colors: dark, ...shared };
@@ -169,6 +180,8 @@ export const contrastPairs: ContrastPair[] = [
   { label: 'Action label on primary', fg: (c) => c.action.onPrimary, bg: (c) => c.action.primary, min: 4.5 },
   { label: 'Action label on primary (pressed)', fg: (c) => c.action.onPrimary, bg: (c) => c.action.primaryPressed, min: 4.5 },
   { label: 'Inverse text on primary action', fg: (c) => c.text.inverse, bg: (c) => c.action.primary, min: 4.5 },
+  { label: 'Label on destructive action', fg: (c) => c.action.onDestructive, bg: (c) => c.action.destructive, min: 4.5 },
+  { label: 'Label on destructive action (pressed)', fg: (c) => c.action.onDestructive, bg: (c) => c.action.destructivePressed, min: 4.5 },
   { label: 'Text on subtle action tint', fg: (c) => c.action.onSubtle, bg: (c) => c.action.subtle, min: 4.5 },
   { label: 'Action as text on surface', fg: (c) => c.action.primary, bg: (c) => c.surface.primary, min: 4.5 },
   { label: 'Success on its tint', fg: (c) => c.status.success.text, bg: (c) => c.status.success.background, min: 4.5 },

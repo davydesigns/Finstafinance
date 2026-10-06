@@ -18,9 +18,7 @@ function ThemedStack() {
       >
         <Stack.Screen name="index" options={{ title: 'Design system' }} />
         <Stack.Screen name="foundations" options={{ title: 'Foundations' }} />
-        <Stack.Screen name="components/text" options={{ title: 'Text' }} />
-        <Stack.Screen name="components/button" options={{ title: 'Button' }} />
-        <Stack.Screen name="components/card" options={{ title: 'Card' }} />
+        <Stack.Screen name="gallery" options={{ title: 'Gallery' }} />
       </Stack>
     </>
   );

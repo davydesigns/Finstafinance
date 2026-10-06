@@ -53,12 +53,13 @@ const tabular: TextStyle['fontVariant'] = ['tabular-nums'];
 /** Named text styles. Components pick one of these, never raw sizes. */
 export const typography = {
   display: { fontSize: fontSize[36], lineHeight: lineHeight[36], fontWeight: fontWeight.bold, letterSpacing: -0.5, maxFontSizeMultiplier: 1.2 },
-  title1: { fontSize: fontSize[28], lineHeight: lineHeight[28], fontWeight: fontWeight.bold, letterSpacing: -0.3, maxFontSizeMultiplier: 1.3 },
-  title2: { fontSize: fontSize[22], lineHeight: lineHeight[22], fontWeight: fontWeight.semibold, maxFontSizeMultiplier: 1.4 },
-  title3: { fontSize: fontSize[18], lineHeight: lineHeight[18], fontWeight: fontWeight.semibold, maxFontSizeMultiplier: 1.5 },
+  heading1: { fontSize: fontSize[28], lineHeight: lineHeight[28], fontWeight: fontWeight.bold, letterSpacing: -0.3, maxFontSizeMultiplier: 1.3 },
+  heading2: { fontSize: fontSize[22], lineHeight: lineHeight[22], fontWeight: fontWeight.semibold, maxFontSizeMultiplier: 1.4 },
+  heading3: { fontSize: fontSize[18], lineHeight: lineHeight[18], fontWeight: fontWeight.semibold, maxFontSizeMultiplier: 1.5 },
   body: { fontSize: fontSize[16], lineHeight: lineHeight[16], fontWeight: fontWeight.regular, maxFontSizeMultiplier: 1.8 },
   bodyStrong: { fontSize: fontSize[16], lineHeight: lineHeight[16], fontWeight: fontWeight.semibold, maxFontSizeMultiplier: 1.8 },
-  callout: { fontSize: fontSize[14], lineHeight: lineHeight[14], fontWeight: fontWeight.regular, maxFontSizeMultiplier: 1.8 },
+  bodySmall: { fontSize: fontSize[14], lineHeight: lineHeight[14], fontWeight: fontWeight.regular, maxFontSizeMultiplier: 1.8 },
+  label: { fontSize: fontSize[14], lineHeight: lineHeight[14], fontWeight: fontWeight.semibold, maxFontSizeMultiplier: 1.8 },
   caption: { fontSize: fontSize[12], lineHeight: lineHeight[12], fontWeight: fontWeight.medium, letterSpacing: 0.2, maxFontSizeMultiplier: 1.6 },
   /** Money: tabular numerals keep digits aligned in columns. */
   moneyLarge: { fontSize: fontSize[36], lineHeight: lineHeight[36], fontWeight: fontWeight.bold, letterSpacing: -0.5, fontVariant: tabular, maxFontSizeMultiplier: 1.2 },
