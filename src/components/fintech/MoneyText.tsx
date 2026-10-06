@@ -38,6 +38,10 @@ export function MoneyText({
     <Text
       variant={variant}
       color={resolvedColor}
+      // A split number can be misread, so a figure never wraps: it shrinks to fit instead (iOS/Android).
+      numberOfLines={1}
+      adjustsFontSizeToFit
+      minimumFontScale={0.6}
       accessibilityLabel={masked ? 'Amount hidden' : spokenMoney(amount, currency, { locale, signDisplay })}
       {...rest}
     >

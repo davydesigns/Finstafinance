@@ -32,6 +32,8 @@ export interface AccountCardProps {
   status?: { status: BadgeStatus; label: string };
   /** Privacy mode: hides the balance and says so to screen readers. */
   hideBalance?: boolean;
+  /** Set false when `name` already says the type ("Checking"), to avoid "Checking / Checking · 4821". */
+  showAccountType?: boolean;
   locale?: string;
   /** Makes the whole card tappable (e.g. open the account). */
   onPress?: () => void;
@@ -46,6 +48,7 @@ export function AccountCard({
   balanceLabel = 'Available balance',
   status,
   hideBalance = false,
+  showAccountType = true,
   locale,
   onPress,
 }: AccountCardProps) {
@@ -74,7 +77,7 @@ export function AccountCard({
               {name}
             </Text>
             <Text variant="bodySmall" color="secondary">
-              {typeLabel} · •••• {lastFour}
+              {showAccountType ? `${typeLabel} · ` : ''}•••• {lastFour}
             </Text>
           </View>
           {status ? <StatusBadge status={status.status} label={status.label} /> : null}

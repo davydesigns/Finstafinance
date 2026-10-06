@@ -71,7 +71,7 @@ export default function Accounts() {
 
       <Section title="Accounts">
         {ACCOUNTS.map(({ id, ...account }) => (
-          <AccountCard key={id} {...account} currency={CURRENCY} onPress={noop} />
+          <AccountCard key={id} {...account} currency={CURRENCY} showAccountType={false} onPress={noop} />
         ))}
       </Section>
 
