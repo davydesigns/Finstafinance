@@ -30,6 +30,10 @@ const GLYPHS = {
 
 export type IconName = keyof typeof GLYPHS;
 
+// Start loading the font as soon as the design system loads, so icons rarely appear late.
+// Fire and forget: nothing waits on it, and a failure just means icons stay blank.
+void Ionicons.loadFont?.()?.catch(() => undefined);
+
 export interface IconProps extends ColorChoice {
   name: IconName;
   size?: IconSize;

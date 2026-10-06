@@ -130,7 +130,8 @@ export function AmountInput({
           autoComplete="off"
           spellCheck={false}
           accessibilityState={{ disabled }}
-          style={[inputType, { flex: 1, color: disabled ? colors.text.disabled : colors.text.primary, paddingVertical: space[3] }]}
+          // minWidth 0 lets the field shrink with its box; otherwise a browser's built-in input width forces overflow on narrow screens.
+          style={[inputType, { flex: 1, minWidth: 0, color: disabled ? colors.text.disabled : colors.text.primary, paddingVertical: space[3] }]}
           {...rest}
         />
       </Pressable>

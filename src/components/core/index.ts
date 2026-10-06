@@ -8,6 +8,7 @@ export { Icon } from './Icon';
 export type { IconProps, IconName } from './Icon';
 export { IconTile } from './IconTile';
 export { Stack, Row } from './Stack';
+export { Screen } from './Screen';
 export { PressableSurface } from './PressableSurface';
 export { SegmentedControl } from './SegmentedControl';
 export { useFocusRing } from './useFocusRing';

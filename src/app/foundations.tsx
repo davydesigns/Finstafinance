@@ -57,7 +57,8 @@ function Swatch({ label, color, onColor }: { label: string; color: string; onCol
       accessible
       accessibilityLabel={`${label}, ${color}`}
       style={{
-        width: '48%',
+        flexGrow: 1,
+        flexBasis: size.minContentWidth,
         minHeight: size.minActionWidth - space[6],
         padding: space[3],
         borderRadius: radius.md,
@@ -78,7 +79,7 @@ function Swatch({ label, color, onColor }: { label: string; color: string; onCol
 function Palette() {
   const { colors: c, space } = useTheme();
   return (
-    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space[2], justifyContent: 'space-between' }}>
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space[2] }}>
       <Swatch label="background.primary" color={c.background.primary} onColor={c.text.primary} />
       <Swatch label="background.secondary" color={c.background.secondary} onColor={c.text.primary} />
       <Swatch label="surface.primary" color={c.surface.primary} onColor={c.text.primary} />

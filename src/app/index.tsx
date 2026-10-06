@@ -1,7 +1,7 @@
 import { Link, type Href } from 'expo-router';
-import { Pressable, ScrollView, View } from 'react-native';
+import { Pressable } from 'react-native';
 
-import { Card, Text } from '@/components/core';
+import { Card, Screen, Stack, Text } from '@/components/core';
 import { useTheme } from '@/theme';
 
 const ENTRIES: { href: Href; title: string; subtitle: string }[] = [
@@ -12,37 +12,35 @@ const ENTRIES: { href: Href; title: string; subtitle: string }[] = [
 ];
 
 export default function GalleryHome() {
-  const { colors, space, radius, touchTarget } = useTheme();
+  const { space, radius, touchTarget } = useTheme();
 
   return (
-    <ScrollView contentContainerStyle={{ padding: space[4], gap: space[3] }}>
-      <Text variant="heading1" accessibilityRole="header">
-        Fintech design system
-      </Text>
-      <Text color="secondary">React Native + Expo. Tokens first, then components.</Text>
+    <Screen>
+      <Stack gap={3}>
+        <Text variant="heading1">Fintech design system</Text>
+        <Text color="secondary">React Native + Expo. Tokens first, then components.</Text>
 
-      <View style={{ gap: space[2], marginTop: space[4] }}>
-        {ENTRIES.map((entry) => (
-          <Link key={entry.title} href={entry.href} asChild>
-            <Pressable
-              accessibilityRole="link"
-              accessibilityLabel={`${entry.title}: ${entry.subtitle}`}
-              style={({ pressed }) => ({
-                minHeight: touchTarget,
-                borderRadius: radius.lg,
-                backgroundColor: pressed ? colors.action.subtle : 'transparent',
-              })}
-            >
-              <Card>
-                <Text variant="bodyStrong">{entry.title}</Text>
-                <Text variant="bodySmall" color="secondary">
-                  {entry.subtitle}
-                </Text>
-              </Card>
-            </Pressable>
-          </Link>
-        ))}
-      </View>
-    </ScrollView>
+        <Stack gap={2} style={{ marginTop: space[4] }}>
+          {ENTRIES.map((entry) => (
+            <Link key={entry.title} href={entry.href} asChild>
+              <Pressable
+                accessibilityRole="link"
+                accessibilityLabel={`${entry.title}: ${entry.subtitle}`}
+                style={{ minHeight: touchTarget, borderRadius: radius.lg }}
+              >
+                {({ pressed }) => (
+                  <Card pressed={pressed}>
+                    <Text variant="bodyStrong">{entry.title}</Text>
+                    <Text variant="bodySmall" color="secondary">
+                      {entry.subtitle}
+                    </Text>
+                  </Card>
+                )}
+              </Pressable>
+            </Link>
+          ))}
+        </Stack>
+      </Stack>
+    </Screen>
   );
 }

@@ -16,7 +16,7 @@ npm run check            # typecheck + lint + tests (run before every commit)
   The raw `palette` is **not** exported; only `themes.ts` may import it (ESLint enforces this).
 - `src/theme/themes.ts`: semantic roles (`text.primary`, `action.primary`, `status.success.text`) for light and dark.
 - `src/i18n/`: `LocaleProvider` sets locale once; every built-in string can be overridden.
-- `src/components/core/`: Text, Button, Card, Icon, Stack/Row, PressableSurface, SegmentedControl.
+- `src/components/core/`: Text, Button, Card, Icon, Screen, Stack/Row, PressableSurface, SegmentedControl.
 - `src/components/fintech/`: MoneyText, StatusBadge, TransactionRow, AccountCard, AmountInput.
 - `src/utils/money.ts`: the `Money` type and formatting. Amounts are **integer minor units** (1250 = $12.50).
 - `src/dev/`: dev-only contrast contract. `src/app/`, `src/gallery/`: the component gallery and demo screens.
@@ -28,6 +28,7 @@ npm run check            # typecheck + lint + tests (run before every commit)
 | Colour | Components use semantic tokens only. `Text` takes a `color` role or a status `tone`, never a hex. |
 | Style props | Consumers may pass **layout** only (margin, flex, alignment). Types reject colour/type overrides. |
 | Placement | Components never position themselves. Parents use `Stack`/`Row`. |
+| Responsive | Start every screen with `<Screen>` (centred, width-capped, safe-area aware). Branch layouts with `useBreakpoint()` (`compact` < 600, `medium` < 960, `expanded`). Prefer `Row wrap` with `flexGrow` + `flexBasis` tokens over fixed widths, so layouts flex on their own. |
 | Money | Always `Money` (`money(1250, 'USD')`), never a bare number. It throws on non-integers. |
 | Visible text prop | `label` for controls (Button, StatusBadge, AmountInput); `title` for entities (TransactionRow, AccountCard). |
 | Booleans | `disabled`, `loading`, `masked`. Status vocabulary is `success / warning / danger / neutral`. |

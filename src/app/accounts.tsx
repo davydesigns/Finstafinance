@@ -1,8 +1,6 @@
-import { ScrollView } from 'react-native';
-
-import { Button, Card, Row, Stack, Text } from '@/components/core';
+import { Button, Card, Row, Screen, Stack, Text } from '@/components/core';
 import { AccountCard, MoneyText, TransactionRow, type AccountCardProps } from '@/components/fintech';
-import { useTheme } from '@/theme';
+import { useBreakpoint, useTheme } from '@/theme';
 import { money, spokenMoney } from '@/utils/money';
 
 /**
@@ -26,52 +24,82 @@ const ACTIVITY = [
 const noop = () => undefined;
 
 export default function Accounts() {
-  const { space, size } = useTheme();
+  const { size } = useTheme();
+  const expanded = useBreakpoint() === 'expanded';
   const total = money(
     ACCOUNTS.reduce((sum, account) => sum + account.balance.minor, 0),
     CURRENCY,
   );
 
-  return (
-    <ScrollView contentContainerStyle={{ padding: space[4], paddingBottom: space[16], gap: space[8] }}>
-      <Stack gap={4}>
-        <Text variant="heading1">Good morning</Text>
+  const summary = (
+    <Stack gap={4}>
+      <Text variant="heading1">Good morning</Text>
 
-        <Stack gap={1} accessible accessibilityLabel={`Total balance, ${spokenMoney(total)}`}>
-          <Text variant="bodySmall" color="secondary">
-            Total balance
-          </Text>
-          <MoneyText variant="moneyLarge" amount={total} />
+      <Stack gap={1} accessible accessibilityLabel={`Total balance, ${spokenMoney(total)}`}>
+        <Text variant="bodySmall" color="secondary">
+          Total balance
+        </Text>
+        <MoneyText variant="moneyLarge" amount={total} />
+      </Stack>
+
+      {/* Equal-width actions that wrap when there is no room. */}
+      <Row wrap gap={2}>
+        <Stack style={{ flexGrow: 1, flexBasis: size.minActionWidth }}>
+          <Button label="Transfer" fullWidth onPress={noop} />
         </Stack>
+        <Stack style={{ flexGrow: 1, flexBasis: size.minActionWidth }}>
+          <Button label="Pay" variant="secondary" fullWidth onPress={noop} />
+        </Stack>
+        <Stack style={{ flexGrow: 1, flexBasis: size.minActionWidth }}>
+          <Button label="Deposit" variant="secondary" fullWidth onPress={noop} />
+        </Stack>
+      </Row>
+    </Stack>
+  );
 
-        <Row wrap gap={2}>
-          <Stack style={{ flexGrow: 1, flexBasis: size.minActionWidth }}>
-            <Button label="Transfer" fullWidth onPress={noop} />
-          </Stack>
-          <Stack style={{ flexGrow: 1, flexBasis: size.minActionWidth }}>
-            <Button label="Pay" variant="secondary" fullWidth onPress={noop} />
-          </Stack>
-          <Stack style={{ flexGrow: 1, flexBasis: size.minActionWidth }}>
-            <Button label="Deposit" variant="secondary" fullWidth onPress={noop} />
-          </Stack>
-        </Row>
-      </Stack>
-
-      <Stack gap={3}>
-        <Text variant="heading2">Accounts</Text>
+  // Cards sit side by side whenever two fit, and stack when they don't.
+  const accounts = (
+    <Stack gap={3}>
+      <Text variant="heading2">Accounts</Text>
+      <Row wrap gap={3} align="stretch">
         {ACCOUNTS.map(({ id, ...account }) => (
-          <AccountCard key={id} {...account} showAccountType={false} onPress={noop} />
+          <Stack key={id} style={{ flexGrow: 1, flexBasis: size.minCardWidth }}>
+            <AccountCard {...account} showAccountType={false} onPress={noop} />
+          </Stack>
         ))}
-      </Stack>
+      </Row>
+    </Stack>
+  );
 
-      <Stack gap={3}>
-        <Text variant="heading2">Recent activity</Text>
-        <Card variant="outlined" padding="sm">
-          {ACTIVITY.map(({ id, ...transaction }) => (
-            <TransactionRow key={id} {...transaction} onPress={noop} />
-          ))}
-        </Card>
-      </Stack>
-    </ScrollView>
+  const activity = (
+    <Stack gap={3}>
+      <Text variant="heading2">Recent activity</Text>
+      <Card variant="outlined" padding="sm">
+        {ACTIVITY.map(({ id, ...transaction }) => (
+          <TransactionRow key={id} {...transaction} onPress={noop} />
+        ))}
+      </Card>
+    </Stack>
+  );
+
+  return (
+    <Screen width="wide">
+      {expanded ? (
+        // Desktop: overview on the left, activity beside it.
+        <Row gap={8} align="start">
+          <Stack gap={8} style={{ flex: 3 }}>
+            {summary}
+            {accounts}
+          </Stack>
+          <Stack style={{ flex: 2 }}>{activity}</Stack>
+        </Row>
+      ) : (
+        <Stack gap={8}>
+          {summary}
+          {accounts}
+          {activity}
+        </Stack>
+      )}
+    </Screen>
   );
 }
