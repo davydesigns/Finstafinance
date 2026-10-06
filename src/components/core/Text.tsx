@@ -12,10 +12,11 @@ export type TextColor =
   | 'success'
   | 'warning'
   | 'danger'
-  | 'info';
+  | 'info'
+  | 'neutral';
 
 /** Map a role name to the actual colour for the current theme. */
-function resolveColor(colors: SemanticColors, color: TextColor): string {
+export function resolveTextColor(colors: SemanticColors, color: TextColor): string {
   switch (color) {
     case 'primary':
       return colors.text.primary;
@@ -54,7 +55,7 @@ export function Text({ variant = 'body', color = 'primary', style, maxFontSizeMu
   return (
     <RNText
       maxFontSizeMultiplier={maxFontSizeMultiplier ?? defaultCap}
-      style={[typeStyle, { color: resolveColor(colors, color) }, style]}
+      style={[typeStyle, { color: resolveTextColor(colors, color) }, style]}
       {...rest}
     />
   );

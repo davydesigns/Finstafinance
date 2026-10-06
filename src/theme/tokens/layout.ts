@@ -12,3 +12,12 @@ export const controlHeight = {
 } as const;
 
 export type ControlSize = keyof typeof controlHeight;
+
+/** Icon glyph sizes in points. */
+export const iconSize = {
+  small: 16,
+  medium: 20,
+  large: 24,
+} as const;
+
+export type IconSize = keyof typeof iconSize;

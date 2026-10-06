@@ -1,7 +1,7 @@
 import { palette as p } from './tokens/color';
 import { elevation } from './tokens/elevation';
 import { borderWidth } from './tokens/border';
-import { controlHeight, touchTarget } from './tokens/layout';
+import { controlHeight, iconSize, touchTarget } from './tokens/layout';
 import { radius } from './tokens/radius';
 import { space } from './tokens/spacing';
 import { fontSize, fontWeight, lineHeight, typography } from './tokens/typography';
@@ -65,6 +65,8 @@ export interface SemanticColors {
     warning: StatusColors;
     danger: StatusColors;
     info: StatusColors;
+    /** No judgement: inactive, closed, unknown. */
+    neutral: StatusColors;
   };
   overlay: string;
 }
@@ -96,6 +98,7 @@ const light: SemanticColors = {
     warning: { text: p.amber800, background: p.amber50 },
     danger: { text: p.red700, background: p.red50 },
     info: { text: p.blue700, background: p.blue50 },
+    neutral: { text: p.neutral700, background: p.neutral100 },
   },
   overlay: 'rgba(14, 18, 26, 0.5)',
 };
@@ -128,6 +131,7 @@ const dark: SemanticColors = {
     warning: { text: p.amber300, background: p.amber950 },
     danger: { text: p.red300, background: p.red900 },
     info: { text: p.blue200, background: p.blue900 },
+    neutral: { text: p.neutral200, background: p.neutral800 },
   },
   overlay: 'rgba(0, 0, 0, 0.65)',
 };
@@ -147,9 +151,10 @@ export interface Theme {
   elevation: typeof elevation;
   touchTarget: number;
   controlHeight: typeof controlHeight;
+  iconSize: typeof iconSize;
 }
 
-const shared = { space, radius, fontSize, lineHeight, fontWeight, typography, borderWidth, elevation, touchTarget, controlHeight };
+const shared = { space, radius, fontSize, lineHeight, fontWeight, typography, borderWidth, elevation, touchTarget, controlHeight, iconSize };
 
 export const lightTheme: Theme = { name: 'light', colors: light, ...shared };
 export const darkTheme: Theme = { name: 'dark', colors: dark, ...shared };
@@ -192,6 +197,8 @@ export const contrastPairs: ContrastPair[] = [
   { label: 'Danger on surface', fg: (c) => c.status.danger.text, bg: (c) => c.surface.primary, min: 4.5 },
   { label: 'Info on its tint', fg: (c) => c.status.info.text, bg: (c) => c.status.info.background, min: 4.5 },
   { label: 'Info on surface', fg: (c) => c.status.info.text, bg: (c) => c.surface.primary, min: 4.5 },
+  { label: 'Neutral on its tint', fg: (c) => c.status.neutral.text, bg: (c) => c.status.neutral.background, min: 4.5 },
+  { label: 'Neutral on surface', fg: (c) => c.status.neutral.text, bg: (c) => c.surface.primary, min: 4.5 },
   { label: 'Input border on surface', fg: (c) => c.border.strong, bg: (c) => c.surface.primary, min: 3 },
   { label: 'Focus ring on surface', fg: (c) => c.border.focus, bg: (c) => c.surface.primary, min: 3 },
   { label: 'Focus ring on background', fg: (c) => c.border.focus, bg: (c) => c.background.primary, min: 3 },

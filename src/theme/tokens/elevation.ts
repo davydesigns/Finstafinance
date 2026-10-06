@@ -1,21 +1,17 @@
 import type { ViewStyle } from 'react-native';
 
 /**
- * Elevation. iOS draws shadows from the `shadow*` props; Android uses the
- * single `elevation` number. Each level sets both so it looks right everywhere.
- * In dark mode, shadows are barely visible, so surfaces get lighter instead
- * (see `surfaceRaised` in themes.ts).
+ * Elevation, expressed with React Native's `boxShadow` (works on iOS and Android).
+ * In dark mode shadows are barely visible, so surfaces get lighter instead
+ * (see `surface.elevated` in themes.ts).
  */
-type Elevation = Pick<
-  ViewStyle,
-  'shadowColor' | 'shadowOffset' | 'shadowOpacity' | 'shadowRadius' | 'elevation'
->;
+type Elevation = Pick<ViewStyle, 'boxShadow'>;
 
 export const elevation = {
-  none: { shadowColor: '#000000', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0, shadowRadius: 0, elevation: 0 },
-  low: { shadowColor: '#0C1D3B', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 3, elevation: 1 },
-  medium: { shadowColor: '#0C1D3B', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.12, shadowRadius: 10, elevation: 4 },
-  high: { shadowColor: '#0C1D3B', shadowOffset: { width: 0, height: 12 }, shadowOpacity: 0.18, shadowRadius: 24, elevation: 10 },
+  none: { boxShadow: [] },
+  low: { boxShadow: '0 1px 3px rgba(12, 29, 59, 0.08)' },
+  medium: { boxShadow: '0 4px 10px rgba(12, 29, 59, 0.12)' },
+  high: { boxShadow: '0 12px 24px rgba(12, 29, 59, 0.18)' },
 } as const satisfies Record<string, Elevation>;
 
 export type ElevationToken = keyof typeof elevation;

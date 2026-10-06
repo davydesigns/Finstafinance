@@ -9,5 +9,5 @@ export { borderWidth } from './border';
 export type { BorderWidthToken } from './border';
 export { elevation } from './elevation';
 export type { ElevationToken } from './elevation';
-export { touchTarget, controlHeight } from './layout';
-export type { ControlSize } from './layout';
+export { touchTarget, controlHeight, iconSize } from './layout';
+export type { ControlSize, IconSize } from './layout';
