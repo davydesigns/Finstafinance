@@ -1,107 +1,124 @@
 import { palette as p } from './tokens/color';
 import { elevation } from './tokens/elevation';
-import { focusRingWidth, touchTarget } from './tokens/layout';
+import { borderWidth } from './tokens/border';
+import { touchTarget } from './tokens/layout';
 import { radius } from './tokens/radius';
 import { space } from './tokens/spacing';
-import { typography } from './tokens/typography';
+import { fontSize, fontWeight, lineHeight, typography } from './tokens/typography';
 
 interface StatusColors {
-  /** Text / icon colour. Readable on both `bg` and the page surface. */
-  fg: string;
-  /** Soft background tint for badges and banners. */
-  bg: string;
+  /** Text / icon colour. Readable on both `background` and the page surface. */
+  text: string;
+  /** Soft tint for badges and banners. */
+  background: string;
 }
 
 /**
- * SEMANTIC colour tokens: named by ROLE, not by hue. Components use these
- * only. Light and dark map the same names to different palette values.
+ * SEMANTIC colour tokens: named by ROLE, not by hue. Components use only
+ * these. Light and dark map the same names to different palette values.
+ * Read them as paths: `colors.text.primary`, `colors.action.primary`.
  */
 export interface SemanticColors {
-  background: string;
-  surface: string;
-  surfaceRaised: string;
-  border: string;
-  /** For input outlines and other boundaries that must be clearly visible (3:1). */
-  borderStrong: string;
-
-  textPrimary: string;
-  textSecondary: string;
-
-  primary: string;
-  primaryPressed: string;
-  onPrimary: string;
-  primarySubtle: string;
-  onPrimarySubtle: string;
-
+  background: {
+    /** The page behind everything. */
+    primary: string;
+    /** A quieter band or grouped region on the page. */
+    secondary: string;
+  };
+  surface: {
+    /** Cards, sheets, inputs. */
+    primary: string;
+    /** Content that floats above `primary` (raised cards, menus). */
+    elevated: string;
+  };
+  text: {
+    primary: string;
+    secondary: string;
+    /** Text on a dark-on-light-inverted fill, e.g. over `action.primary` in light mode. */
+    inverse: string;
+    link: string;
+    disabled: string;
+  };
+  border: {
+    default: string;
+    /** Input outlines and boundaries that must be clearly visible (3:1). */
+    strong: string;
+    focus: string;
+  };
+  action: {
+    primary: string;
+    primaryPressed: string;
+    /** Label or icon on top of `primary`. */
+    onPrimary: string;
+    /** Light tint: pressed state for secondary/tertiary actions, selected rows. */
+    subtle: string;
+    onSubtle: string;
+    /** Disabled controls are exempt from WCAG contrast rules but stay legible. */
+    disabled: string;
+  };
   status: {
     success: StatusColors;
     warning: StatusColors;
     danger: StatusColors;
     info: StatusColors;
   };
-
-  focusRing: string;
-  /** Disabled controls are exempt from WCAG contrast rules, but stay legible. */
-  disabledBg: string;
-  disabledText: string;
   overlay: string;
 }
 
 const light: SemanticColors = {
-  background: p.neutral50,
-  surface: p.white,
-  surfaceRaised: p.white,
-  border: p.neutral200,
-  borderStrong: p.neutral500,
-
-  textPrimary: p.neutral900,
-  textSecondary: p.neutral600,
-
-  primary: p.blue600,
-  primaryPressed: p.blue700,
-  onPrimary: p.white,
-  primarySubtle: p.blue50,
-  onPrimarySubtle: p.blue800,
-
-  status: {
-    success: { fg: p.green700, bg: p.green50 },
-    warning: { fg: p.amber800, bg: p.amber50 },
-    danger: { fg: p.red700, bg: p.red50 },
-    info: { fg: p.blue700, bg: p.blue50 },
+  background: { primary: p.neutral50, secondary: p.neutral100 },
+  surface: { primary: p.white, elevated: p.white },
+  text: {
+    primary: p.neutral900,
+    secondary: p.neutral600,
+    inverse: p.white,
+    link: p.blue600,
+    disabled: p.neutral400,
   },
-
-  focusRing: p.blue600,
-  disabledBg: p.neutral100,
-  disabledText: p.neutral400,
+  border: { default: p.neutral200, strong: p.neutral500, focus: p.blue600 },
+  action: {
+    primary: p.blue600,
+    primaryPressed: p.blue700,
+    onPrimary: p.white,
+    subtle: p.blue50,
+    onSubtle: p.blue800,
+    disabled: p.neutral100,
+  },
+  status: {
+    success: { text: p.green700, background: p.green50 },
+    warning: { text: p.amber800, background: p.amber50 },
+    danger: { text: p.red700, background: p.red50 },
+    info: { text: p.blue700, background: p.blue50 },
+  },
   overlay: 'rgba(14, 18, 26, 0.5)',
 };
 
 const dark: SemanticColors = {
-  background: p.neutral950,
-  surface: p.neutral900,
-  surfaceRaised: p.neutral800,
-  border: p.neutral700,
-  borderStrong: p.neutral400,
-
-  textPrimary: p.neutral50,
-  textSecondary: p.neutral300,
-
-  primary: p.blue400,
-  primaryPressed: p.blue300,
-  onPrimary: p.blue950,
-  primarySubtle: p.blue900,
-  onPrimarySubtle: p.blue100,
-
-  status: {
-    success: { fg: p.green300, bg: p.green950 },
-    warning: { fg: p.amber300, bg: p.amber950 },
-    danger: { fg: p.red300, bg: p.red900 },
-    info: { fg: p.blue200, bg: p.blue900 },
+  background: { primary: p.neutral950, secondary: p.neutral900 },
+  // In dark mode "higher" means lighter, because shadows are hard to see.
+  surface: { primary: p.neutral900, elevated: p.neutral800 },
+  text: {
+    primary: p.neutral50,
+    secondary: p.neutral300,
+    inverse: p.neutral950,
+    link: p.blue300,
+    disabled: p.neutral500,
   },
-
-  focusRing: p.blue300,
-  disabledBg: p.neutral800,
-  disabledText: p.neutral500,
+  border: { default: p.neutral700, strong: p.neutral400, focus: p.blue300 },
+  action: {
+    primary: p.blue400,
+    primaryPressed: p.blue300,
+    onPrimary: p.blue950,
+    subtle: p.blue900,
+    onSubtle: p.blue100,
+    disabled: p.neutral800,
+  },
+  status: {
+    success: { text: p.green300, background: p.green950 },
+    warning: { text: p.amber300, background: p.amber950 },
+    danger: { text: p.red300, background: p.red900 },
+    info: { text: p.blue200, background: p.blue900 },
+  },
   overlay: 'rgba(0, 0, 0, 0.65)',
 };
 
@@ -112,13 +129,16 @@ export interface Theme {
   colors: SemanticColors;
   space: typeof space;
   radius: typeof radius;
+  fontSize: typeof fontSize;
+  lineHeight: typeof lineHeight;
+  fontWeight: typeof fontWeight;
   typography: typeof typography;
+  borderWidth: typeof borderWidth;
   elevation: typeof elevation;
   touchTarget: number;
-  focusRingWidth: number;
 }
 
-const shared = { space, radius, typography, elevation, touchTarget, focusRingWidth };
+const shared = { space, radius, fontSize, lineHeight, fontWeight, typography, borderWidth, elevation, touchTarget };
 
 export const lightTheme: Theme = { name: 'light', colors: light, ...shared };
 export const darkTheme: Theme = { name: 'dark', colors: dark, ...shared };
@@ -137,24 +157,29 @@ export interface ContrastPair {
 }
 
 export const contrastPairs: ContrastPair[] = [
-  { label: 'Primary text on background', fg: (c) => c.textPrimary, bg: (c) => c.background, min: 4.5 },
-  { label: 'Primary text on surface', fg: (c) => c.textPrimary, bg: (c) => c.surface, min: 4.5 },
-  { label: 'Primary text on raised surface', fg: (c) => c.textPrimary, bg: (c) => c.surfaceRaised, min: 4.5 },
-  { label: 'Secondary text on background', fg: (c) => c.textSecondary, bg: (c) => c.background, min: 4.5 },
-  { label: 'Secondary text on surface', fg: (c) => c.textSecondary, bg: (c) => c.surface, min: 4.5 },
-  { label: 'Secondary text on raised surface', fg: (c) => c.textSecondary, bg: (c) => c.surfaceRaised, min: 4.5 },
-  { label: 'Button label on primary', fg: (c) => c.onPrimary, bg: (c) => c.primary, min: 4.5 },
-  { label: 'Button label on primary (pressed)', fg: (c) => c.onPrimary, bg: (c) => c.primaryPressed, min: 4.5 },
-  { label: 'Text on primary tint', fg: (c) => c.onPrimarySubtle, bg: (c) => c.primarySubtle, min: 4.5 },
-  { label: 'Primary as text on surface', fg: (c) => c.primary, bg: (c) => c.surface, min: 4.5 },
-  { label: 'Success on its tint', fg: (c) => c.status.success.fg, bg: (c) => c.status.success.bg, min: 4.5 },
-  { label: 'Success on surface', fg: (c) => c.status.success.fg, bg: (c) => c.surface, min: 4.5 },
-  { label: 'Warning on its tint', fg: (c) => c.status.warning.fg, bg: (c) => c.status.warning.bg, min: 4.5 },
-  { label: 'Warning on surface', fg: (c) => c.status.warning.fg, bg: (c) => c.surface, min: 4.5 },
-  { label: 'Danger on its tint', fg: (c) => c.status.danger.fg, bg: (c) => c.status.danger.bg, min: 4.5 },
-  { label: 'Danger on surface', fg: (c) => c.status.danger.fg, bg: (c) => c.surface, min: 4.5 },
-  { label: 'Info on its tint', fg: (c) => c.status.info.fg, bg: (c) => c.status.info.bg, min: 4.5 },
-  { label: 'Info on surface', fg: (c) => c.status.info.fg, bg: (c) => c.surface, min: 4.5 },
-  { label: 'Input border on surface', fg: (c) => c.borderStrong, bg: (c) => c.surface, min: 3 },
-  { label: 'Focus ring on surface', fg: (c) => c.focusRing, bg: (c) => c.surface, min: 3 },
+  { label: 'Primary text on background', fg: (c) => c.text.primary, bg: (c) => c.background.primary, min: 4.5 },
+  { label: 'Primary text on background (secondary)', fg: (c) => c.text.primary, bg: (c) => c.background.secondary, min: 4.5 },
+  { label: 'Primary text on surface', fg: (c) => c.text.primary, bg: (c) => c.surface.primary, min: 4.5 },
+  { label: 'Primary text on elevated surface', fg: (c) => c.text.primary, bg: (c) => c.surface.elevated, min: 4.5 },
+  { label: 'Secondary text on background', fg: (c) => c.text.secondary, bg: (c) => c.background.primary, min: 4.5 },
+  { label: 'Secondary text on surface', fg: (c) => c.text.secondary, bg: (c) => c.surface.primary, min: 4.5 },
+  { label: 'Secondary text on elevated surface', fg: (c) => c.text.secondary, bg: (c) => c.surface.elevated, min: 4.5 },
+  { label: 'Link on surface', fg: (c) => c.text.link, bg: (c) => c.surface.primary, min: 4.5 },
+  { label: 'Link on background', fg: (c) => c.text.link, bg: (c) => c.background.primary, min: 4.5 },
+  { label: 'Action label on primary', fg: (c) => c.action.onPrimary, bg: (c) => c.action.primary, min: 4.5 },
+  { label: 'Action label on primary (pressed)', fg: (c) => c.action.onPrimary, bg: (c) => c.action.primaryPressed, min: 4.5 },
+  { label: 'Inverse text on primary action', fg: (c) => c.text.inverse, bg: (c) => c.action.primary, min: 4.5 },
+  { label: 'Text on subtle action tint', fg: (c) => c.action.onSubtle, bg: (c) => c.action.subtle, min: 4.5 },
+  { label: 'Action as text on surface', fg: (c) => c.action.primary, bg: (c) => c.surface.primary, min: 4.5 },
+  { label: 'Success on its tint', fg: (c) => c.status.success.text, bg: (c) => c.status.success.background, min: 4.5 },
+  { label: 'Success on surface', fg: (c) => c.status.success.text, bg: (c) => c.surface.primary, min: 4.5 },
+  { label: 'Warning on its tint', fg: (c) => c.status.warning.text, bg: (c) => c.status.warning.background, min: 4.5 },
+  { label: 'Warning on surface', fg: (c) => c.status.warning.text, bg: (c) => c.surface.primary, min: 4.5 },
+  { label: 'Danger on its tint', fg: (c) => c.status.danger.text, bg: (c) => c.status.danger.background, min: 4.5 },
+  { label: 'Danger on surface', fg: (c) => c.status.danger.text, bg: (c) => c.surface.primary, min: 4.5 },
+  { label: 'Info on its tint', fg: (c) => c.status.info.text, bg: (c) => c.status.info.background, min: 4.5 },
+  { label: 'Info on surface', fg: (c) => c.status.info.text, bg: (c) => c.surface.primary, min: 4.5 },
+  { label: 'Input border on surface', fg: (c) => c.border.strong, bg: (c) => c.surface.primary, min: 3 },
+  { label: 'Focus ring on surface', fg: (c) => c.border.focus, bg: (c) => c.surface.primary, min: 3 },
+  { label: 'Focus ring on background', fg: (c) => c.border.focus, bg: (c) => c.background.primary, min: 3 },
 ];

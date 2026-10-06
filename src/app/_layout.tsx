@@ -10,14 +10,17 @@ function ThemedStack() {
       <StatusBar style={name === 'dark' ? 'light' : 'dark'} />
       <Stack
         screenOptions={{
-          headerStyle: { backgroundColor: colors.surface },
-          headerTintColor: colors.textPrimary,
+          headerStyle: { backgroundColor: colors.surface.primary },
+          headerTintColor: colors.text.primary,
           headerShadowVisible: false,
-          contentStyle: { backgroundColor: colors.background },
+          contentStyle: { backgroundColor: colors.background.primary },
         }}
       >
         <Stack.Screen name="index" options={{ title: 'Design system' }} />
         <Stack.Screen name="foundations" options={{ title: 'Foundations' }} />
+        <Stack.Screen name="components/text" options={{ title: 'Text' }} />
+        <Stack.Screen name="components/button" options={{ title: 'Button' }} />
+        <Stack.Screen name="components/card" options={{ title: 'Card' }} />
       </Stack>
     </>
   );

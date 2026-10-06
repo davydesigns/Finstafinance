@@ -1,44 +1,47 @@
-import { Link } from 'expo-router';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Link, type Href } from 'expo-router';
+import { Pressable, ScrollView, View } from 'react-native';
 
+import { Card, Text } from '@/components/core';
 import { useTheme } from '@/theme';
 
+const ENTRIES: { href: Href; title: string; subtitle: string }[] = [
+  { href: '/foundations', title: 'Foundations', subtitle: 'Colour, type, spacing, radius, elevation' },
+  { href: '/components/text', title: 'Text', subtitle: 'Type scale and colour roles' },
+  { href: '/components/button', title: 'Button', subtitle: 'Variants, disabled, loading' },
+  { href: '/components/card', title: 'Card', subtitle: 'Outlined and raised containers' },
+];
+
 export default function GalleryHome() {
-  const { colors, space, radius, typography, touchTarget } = useTheme();
-  const t = typography;
+  const { colors, space, radius, touchTarget } = useTheme();
 
   return (
     <ScrollView contentContainerStyle={{ padding: space[4], gap: space[3] }}>
-      <Text style={[t.title1, { color: colors.textPrimary }]} accessibilityRole="header" maxFontSizeMultiplier={t.title1.maxFontSizeMultiplier}>
+      <Text variant="title1" accessibilityRole="header">
         Fintech design system
       </Text>
-      <Text style={[t.body, { color: colors.textSecondary }]} maxFontSizeMultiplier={t.body.maxFontSizeMultiplier}>
-        React Native + Expo. Tokens first, then components.
-      </Text>
+      <Text color="secondary">React Native + Expo. Tokens first, then components.</Text>
 
       <View style={{ gap: space[2], marginTop: space[4] }}>
-        <Link href="/foundations" asChild>
-          <Pressable
-            accessibilityRole="link"
-            accessibilityLabel="Foundations: colour, type, spacing, radius and elevation"
-            style={({ pressed }) => ({
-              minHeight: touchTarget,
-              justifyContent: 'center',
-              padding: space[4],
-              borderRadius: radius.md,
-              backgroundColor: pressed ? colors.primarySubtle : colors.surface,
-              borderWidth: 1,
-              borderColor: colors.border,
-            })}
-          >
-            <Text style={[t.bodyStrong, { color: colors.textPrimary }]} maxFontSizeMultiplier={t.bodyStrong.maxFontSizeMultiplier}>
-              Foundations
-            </Text>
-            <Text style={[t.callout, { color: colors.textSecondary }]} maxFontSizeMultiplier={t.callout.maxFontSizeMultiplier}>
-              Colour, type, spacing, radius, elevation
-            </Text>
-          </Pressable>
-        </Link>
+        {ENTRIES.map((entry) => (
+          <Link key={entry.title} href={entry.href} asChild>
+            <Pressable
+              accessibilityRole="link"
+              accessibilityLabel={`${entry.title}: ${entry.subtitle}`}
+              style={({ pressed }) => ({
+                minHeight: touchTarget,
+                borderRadius: radius.lg,
+                backgroundColor: pressed ? colors.action.subtle : 'transparent',
+              })}
+            >
+              <Card>
+                <Text variant="bodyStrong">{entry.title}</Text>
+                <Text variant="callout" color="secondary">
+                  {entry.subtitle}
+                </Text>
+              </Card>
+            </Pressable>
+          </Link>
+        ))}
       </View>
     </ScrollView>
   );

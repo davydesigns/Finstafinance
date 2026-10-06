@@ -20,7 +20,7 @@ function SectionTitle({ children }: { children: string }) {
     <Text
       accessibilityRole="header"
       maxFontSizeMultiplier={t.title2.maxFontSizeMultiplier}
-      style={[t.title2, { color: colors.textPrimary, marginTop: space[8], marginBottom: space[3] }]}
+      style={[t.title2, { color: colors.text.primary, marginTop: space[8], marginBottom: space[3] }]}
     >
       {children}
     </Text>
@@ -49,14 +49,14 @@ function ThemeSwitcher() {
               alignItems: 'center',
               justifyContent: 'center',
               borderRadius: radius.full,
-              backgroundColor: selected ? colors.primary : colors.surface,
+              backgroundColor: selected ? colors.action.primary : colors.surface.primary,
               borderWidth: 1,
-              borderColor: selected ? colors.primary : colors.borderStrong,
+              borderColor: selected ? colors.action.primary : colors.border.strong,
             }}
           >
             <Text
               maxFontSizeMultiplier={t.bodyStrong.maxFontSizeMultiplier}
-              style={[t.bodyStrong, { color: selected ? colors.onPrimary : colors.textPrimary }]}
+              style={[t.bodyStrong, { color: selected ? colors.action.onPrimary : colors.text.primary }]}
             >
               {option[0].toUpperCase() + option.slice(1)}
             </Text>
@@ -89,7 +89,7 @@ function ContrastTable() {
               borderRadius: radius.md,
               backgroundColor: bg,
               borderWidth: 1,
-              borderColor: colors.border,
+              borderColor: colors.border.default,
             }}
           >
             <Text maxFontSizeMultiplier={t.callout.maxFontSizeMultiplier} style={[t.callout, { flex: 1, color: fg }]}>
@@ -119,7 +119,7 @@ function Swatch({ label, color, onColor }: { label: string; color: string; onCol
         borderRadius: radius.md,
         backgroundColor: color,
         borderWidth: 1,
-        borderColor: colors.border,
+        borderColor: colors.border.default,
         justifyContent: 'flex-end',
       }}
     >
@@ -134,15 +134,16 @@ function Palette() {
   const { colors: c, space } = useTheme();
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space[2], justifyContent: 'space-between' }}>
-      <Swatch label="background" color={c.background} onColor={c.textPrimary} />
-      <Swatch label="surface" color={c.surface} onColor={c.textPrimary} />
-      <Swatch label="surfaceRaised" color={c.surfaceRaised} onColor={c.textPrimary} />
-      <Swatch label="primary" color={c.primary} onColor={c.onPrimary} />
-      <Swatch label="primarySubtle" color={c.primarySubtle} onColor={c.onPrimarySubtle} />
-      <Swatch label="success" color={c.status.success.bg} onColor={c.status.success.fg} />
-      <Swatch label="warning" color={c.status.warning.bg} onColor={c.status.warning.fg} />
-      <Swatch label="danger" color={c.status.danger.bg} onColor={c.status.danger.fg} />
-      <Swatch label="info" color={c.status.info.bg} onColor={c.status.info.fg} />
+      <Swatch label="background.primary" color={c.background.primary} onColor={c.text.primary} />
+      <Swatch label="background.secondary" color={c.background.secondary} onColor={c.text.primary} />
+      <Swatch label="surface.primary" color={c.surface.primary} onColor={c.text.primary} />
+      <Swatch label="surface.elevated" color={c.surface.elevated} onColor={c.text.primary} />
+      <Swatch label="action.primary" color={c.action.primary} onColor={c.action.onPrimary} />
+      <Swatch label="action.subtle" color={c.action.subtle} onColor={c.action.onSubtle} />
+      <Swatch label="status.success" color={c.status.success.background} onColor={c.status.success.text} />
+      <Swatch label="status.warning" color={c.status.warning.background} onColor={c.status.warning.text} />
+      <Swatch label="status.danger" color={c.status.danger.background} onColor={c.status.danger.text} />
+      <Swatch label="status.info" color={c.status.info.background} onColor={c.status.info.text} />
     </View>
   );
 }
@@ -156,10 +157,10 @@ function TypeScale() {
         const style = typography[variant];
         return (
           <View key={variant}>
-            <Text maxFontSizeMultiplier={typography.caption.maxFontSizeMultiplier} style={[typography.caption, { color: colors.textSecondary }]}>
+            <Text maxFontSizeMultiplier={typography.caption.maxFontSizeMultiplier} style={[typography.caption, { color: colors.text.secondary }]}>
               {variant} · {style.fontSize}/{style.lineHeight} · {style.fontWeight}
             </Text>
-            <Text maxFontSizeMultiplier={style.maxFontSizeMultiplier} style={[style, { color: colors.textPrimary }]}>
+            <Text maxFontSizeMultiplier={style.maxFontSizeMultiplier} style={[style, { color: colors.text.primary }]}>
               {variant.startsWith('money') ? '$12,480.50' : 'Your balance is safe'}
             </Text>
           </View>
@@ -175,10 +176,10 @@ function SpacingRamp() {
     <View style={{ gap: space[2] }}>
       {Object.entries(space).map(([key, value]) => (
         <View key={key} style={{ flexDirection: 'row', alignItems: 'center', gap: space[3] }}>
-          <Text maxFontSizeMultiplier={t.caption.maxFontSizeMultiplier} style={[t.caption, { width: 72, color: colors.textSecondary }]}>
+          <Text maxFontSizeMultiplier={t.caption.maxFontSizeMultiplier} style={[t.caption, { width: 72, color: colors.text.secondary }]}>
             space[{key}] {value}
           </Text>
-          <View style={{ width: Math.max(value, 1), height: 12, backgroundColor: colors.primary, borderRadius: 2 }} />
+          <View style={{ width: Math.max(value, 1), height: 12, backgroundColor: colors.action.primary, borderRadius: 2 }} />
         </View>
       ))}
     </View>
@@ -192,8 +193,8 @@ function RadiusAndElevation() {
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space[3] }}>
         {Object.entries(radius).map(([key, value]) => (
           <View key={key} style={{ alignItems: 'center', gap: space[1] }}>
-            <View style={{ width: 56, height: 56, borderRadius: value, backgroundColor: colors.primarySubtle, borderWidth: 2, borderColor: colors.primary }} />
-            <Text maxFontSizeMultiplier={t.caption.maxFontSizeMultiplier} style={[t.caption, { color: colors.textSecondary }]}>
+            <View style={{ width: 56, height: 56, borderRadius: value, backgroundColor: colors.action.subtle, borderWidth: 2, borderColor: colors.action.primary }} />
+            <Text maxFontSizeMultiplier={t.caption.maxFontSizeMultiplier} style={[t.caption, { color: colors.text.secondary }]}>
               {key}
             </Text>
           </View>
@@ -205,10 +206,10 @@ function RadiusAndElevation() {
             key={key}
             style={[
               style,
-              { width: 72, height: 72, borderRadius: radius.md, backgroundColor: colors.surfaceRaised, alignItems: 'center', justifyContent: 'center' },
+              { width: 72, height: 72, borderRadius: radius.md, backgroundColor: colors.surface.elevated, alignItems: 'center', justifyContent: 'center' },
             ]}
           >
-            <Text maxFontSizeMultiplier={t.caption.maxFontSizeMultiplier} style={[t.caption, { color: colors.textPrimary }]}>
+            <Text maxFontSizeMultiplier={t.caption.maxFontSizeMultiplier} style={[t.caption, { color: colors.text.primary }]}>
               {key}
             </Text>
           </View>

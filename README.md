@@ -15,7 +15,7 @@ npm run check:contrast   # fails if any colour pair drops below WCAG AA
 ## Architecture
 
 - `src/theme/tokens/`: primitive values (palette, spacing, radius, type, elevation)
-- `src/theme/themes.ts`: semantic roles (`textPrimary`, `status.success.fg`) mapped for light and dark
+- `src/theme/themes.ts`: semantic roles (`text.primary`, `action.primary`, `status.success.text`) mapped for light and dark
 - `src/theme/ThemeProvider.tsx`: `useTheme()`; follows the system setting, with a manual override
 - `src/components/`: core and fintech components (components read semantic tokens only)
 - `src/app/`: Expo Router screens, used as the component gallery
