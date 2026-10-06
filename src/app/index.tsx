@@ -5,6 +5,7 @@ import { Card, Text } from '@/components/core';
 import { useTheme } from '@/theme';
 
 const ENTRIES: { href: Href; title: string; subtitle: string }[] = [
+  { href: '/accounts', title: 'Accounts (demo)', subtitle: 'A realistic screen built only from the design system' },
   { href: '/foundations', title: 'Foundations', subtitle: 'Colour, type, spacing, radius, elevation' },
   { href: '/gallery', title: 'Design System Gallery', subtitle: 'Text, Button and Card: every variation' },
   { href: '/fintech', title: 'Fintech components', subtitle: 'MoneyText, AccountCard, TransactionRow, AmountInput, StatusBadge' },
