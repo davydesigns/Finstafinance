@@ -1,12 +1,9 @@
 import { View } from 'react-native';
 
-import { Icon, Text, type IconName } from '@/components/core';
+import { Icon, Text, type IconName, type Tone } from '@/components/core';
 import { useTheme } from '@/theme';
 
-export type BadgeStatus = 'success' | 'warning' | 'error' | 'neutral' | 'pending';
-
-/** Which semantic status colour family each badge status uses. */
-type Tone = 'success' | 'warning' | 'danger' | 'neutral' | 'info';
+export type BadgeStatus = 'success' | 'warning' | 'danger' | 'neutral' | 'pending';
 
 /**
  * Each status has its own colour AND its own icon shape AND a text label,
@@ -15,7 +12,7 @@ type Tone = 'success' | 'warning' | 'danger' | 'neutral' | 'info';
 const CONFIG: Record<BadgeStatus, { icon: IconName; tone: Tone }> = {
   success: { icon: 'checkmark-circle', tone: 'success' },
   warning: { icon: 'warning', tone: 'warning' },
-  error: { icon: 'close-circle', tone: 'danger' },
+  danger: { icon: 'close-circle', tone: 'danger' },
   neutral: { icon: 'remove-circle', tone: 'neutral' },
   pending: { icon: 'time', tone: 'info' },
 };
@@ -26,6 +23,7 @@ export interface StatusBadgeProps {
   label: string;
 }
 
+/** Hugs its content; its parent decides where it sits (see `<Stack align="start">`). */
 export function StatusBadge({ status, label }: StatusBadgeProps) {
   const { colors, space, radius } = useTheme();
   const { icon, tone } = CONFIG[status];
@@ -35,7 +33,6 @@ export function StatusBadge({ status, label }: StatusBadgeProps) {
       accessible
       accessibilityLabel={label}
       style={{
-        alignSelf: 'flex-start',
         flexDirection: 'row',
         alignItems: 'center',
         gap: space[1],
@@ -45,8 +42,8 @@ export function StatusBadge({ status, label }: StatusBadgeProps) {
         backgroundColor: colors.status[tone].background,
       }}
     >
-      <Icon name={icon} size="small" color={tone} />
-      <Text variant="caption" color={tone}>
+      <Icon name={icon} size="small" tone={tone} />
+      <Text variant="caption" tone={tone}>
         {label}
       </Text>
     </View>

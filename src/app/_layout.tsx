@@ -1,8 +1,7 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
+import { LocaleProvider } from '@/i18n';
 import { ThemeProvider, useTheme } from '@/theme';
 
 function ThemedStack() {
@@ -29,13 +28,11 @@ function ThemedStack() {
 }
 
 export default function RootLayout() {
-  // Icons are a font; wait for it so they never flash as empty boxes.
-  const [iconsLoaded] = useFonts(Ionicons.font);
-  if (!iconsLoaded) return null;
-
   return (
     <ThemeProvider>
-      <ThemedStack />
+      <LocaleProvider>
+        <ThemedStack />
+      </LocaleProvider>
     </ThemeProvider>
   );
 }

@@ -12,9 +12,9 @@
       "group": { "kind": "build", "isDefault": true }
     },
     {
-      "label": "Check (types, lint, contrast)",
+      "label": "Check (types, lint, tests)",
       "type": "shell",
-      "command": "source ~/.nvm/nvm.sh && nvm use && npm run typecheck && npm run lint && npm run check:contrast",
+      "command": "source ~/.nvm/nvm.sh && nvm use && npm run check",
       "problemMatcher": []
     }
   ]

@@ -68,3 +68,6 @@ export const typography = {
 } as const satisfies Record<string, TypeStyle>;
 
 export type TypeVariant = keyof typeof typography;
+/** Variants for general text. Money styles belong to `MoneyText`, not `Text`. */
+export type MoneyVariant = 'money' | 'moneyLarge';
+export type TextVariant = Exclude<TypeVariant, MoneyVariant>;

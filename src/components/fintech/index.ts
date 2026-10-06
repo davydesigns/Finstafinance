@@ -1,9 +1,9 @@
 export { MoneyText } from './MoneyText';
-export type { MoneyTextProps } from './MoneyText';
+export type { MoneyTextProps, SignTone } from './MoneyText';
 export { StatusBadge } from './StatusBadge';
 export type { StatusBadgeProps, BadgeStatus } from './StatusBadge';
 export { TransactionRow } from './TransactionRow';
-export type { TransactionRowProps, TransactionType, TransactionStatus } from './TransactionRow';
+export type { TransactionRowProps, TransactionKind, TransactionStatus } from './TransactionRow';
 export { AccountCard } from './AccountCard';
 export type { AccountCardProps, AccountType } from './AccountCard';
 export { AmountInput } from './AmountInput';

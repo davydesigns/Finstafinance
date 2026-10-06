@@ -1,31 +1,41 @@
-import { View, type ViewProps } from 'react-native';
+import { View, type StyleProp, type ViewProps } from 'react-native';
 
-import { useTheme, type SpaceToken } from '@/theme';
+import { useTheme } from '@/theme';
+
+import type { LayoutStyle } from './layoutStyle';
 
 export type CardVariant = 'default' | 'elevated' | 'outlined';
+export type CardPadding = 'sm' | 'md' | 'lg' | 'xl';
 
-export interface CardProps extends ViewProps {
+const PADDING = { sm: 2, md: 4, lg: 6, xl: 8 } as const;
+
+export interface CardProps extends Omit<ViewProps, 'style'> {
   /**
    * `default`: filled surface, no border or shadow.
    * `elevated`: floats above the page with a shadow (lighter surface in dark mode).
    * `outlined`: flat with a border. Good for lists.
    */
   variant?: CardVariant;
-  /** A spacing token key: 4 = 16pt. */
-  padding?: SpaceToken;
+  /** `sm` 8pt, `md` 16pt (default), `lg` 24pt, `xl` 32pt. */
+  padding?: CardPadding;
+  /** Show the pressed look. Set by interactive wrappers, not by hand. */
+  pressed?: boolean;
+  /** Layout only (margin, flex). Colour, radius and border come from tokens. */
+  style?: StyleProp<LayoutStyle>;
 }
 
 /** A themed container for grouping related content. */
-export function Card({ variant = 'default', padding = 4, style, ...rest }: CardProps) {
+export function Card({ variant = 'default', padding = 'md', pressed = false, style, ...rest }: CardProps) {
   const { colors, radius, space, elevation, borderWidth } = useTheme();
+  const base = variant === 'elevated' ? colors.surface.elevated : colors.surface.primary;
 
   return (
     <View
       style={[
         {
-          padding: space[padding],
+          padding: space[PADDING[padding]],
           borderRadius: radius.lg,
-          backgroundColor: variant === 'elevated' ? colors.surface.elevated : colors.surface.primary,
+          backgroundColor: pressed ? colors.surface.pressed : base,
           borderWidth: variant === 'outlined' ? borderWidth.thin : borderWidth.none,
           borderColor: colors.border.default,
         },

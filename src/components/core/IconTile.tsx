@@ -6,16 +6,16 @@ import { Icon, type IconName } from './Icon';
 
 /** An icon centred in a soft circle. Used to lead rows and cards. */
 export function IconTile({ name }: { name: IconName }) {
-  const { colors, controlHeight } = useTheme();
+  const { colors, size } = useTheme();
   return (
     <View
       style={{
-        width: controlHeight.small,
-        height: controlHeight.small,
-        borderRadius: controlHeight.small / 2,
+        width: size.avatar,
+        height: size.avatar,
+        borderRadius: size.avatar / 2,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: colors.action.subtle,
+        backgroundColor: colors.surface.accent,
       }}
     >
       <Icon name={name} color="link" />

@@ -1,13 +1,16 @@
-export { palette } from './color';
+// NOTE: the raw `palette` is deliberately NOT exported here. Only `themes.ts`
+// may import it (enforced by ESLint), so components can only use semantic tokens.
 export { space } from './spacing';
 export type { SpaceToken } from './spacing';
 export { radius } from './radius';
 export type { RadiusToken } from './radius';
 export { fontSize, lineHeight, fontWeight, typography } from './typography';
-export type { TypeStyle, TypeVariant } from './typography';
+export type { TypeStyle, TypeVariant, TextVariant, MoneyVariant } from './typography';
 export { borderWidth } from './border';
 export type { BorderWidthToken } from './border';
 export { elevation } from './elevation';
 export type { ElevationToken } from './elevation';
-export { touchTarget, controlHeight, iconSize } from './layout';
-export type { ControlSize, IconSize } from './layout';
+export { touchTarget, controlHeight } from './interaction';
+export type { ControlSize } from './interaction';
+export { size, iconSize } from './size';
+export type { IconSize } from './size';

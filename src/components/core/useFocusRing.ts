@@ -11,19 +11,17 @@ type FocusHandler = NonNullable<PressableProps['onFocus']>;
  * A touch-only phone user never sees it; keyboard, Switch Control and
  * external-keyboard users depend on it to know where they are.
  */
-export function useFocusRing(onFocus?: FocusHandler | null, onBlur?: FocusHandler | null) {
+export function useFocusRing(onFocus?: PressableProps['onFocus'], onBlur?: PressableProps['onBlur']) {
   const { colors, borderWidth } = useTheme();
   const [focused, setFocused] = useState(false);
 
-  const handlers = {
-    onFocus: ((e) => {
-      setFocused(true);
-      onFocus?.(e);
-    }) as FocusHandler,
-    onBlur: ((e) => {
-      setFocused(false);
-      onBlur?.(e);
-    }) as FocusHandler,
+  const handleFocus: FocusHandler = (event) => {
+    setFocused(true);
+    onFocus?.(event);
+  };
+  const handleBlur: FocusHandler = (event) => {
+    setFocused(false);
+    onBlur?.(event);
   };
 
   const ringStyle: ViewStyle = {
@@ -33,5 +31,5 @@ export function useFocusRing(onFocus?: FocusHandler | null, onBlur?: FocusHandle
     outlineStyle: 'solid',
   };
 
-  return { handlers, ringStyle };
+  return { handlers: { onFocus: handleFocus, onBlur: handleBlur }, ringStyle };
 }

@@ -1,32 +1,33 @@
 import { ActivityIndicator, Pressable, type PressableProps, type ViewStyle } from 'react-native';
 
-import { useTheme, type ControlSize } from '@/theme';
+import { useTheme, type ControlSize, type TextVariant } from '@/theme';
 
-import { Text, type TextColor, type TextProps } from './Text';
+import { TextBase } from './Text';
 import { useFocusRing } from './useFocusRing';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'destructive';
 export type ButtonSize = ControlSize;
 
 export interface ButtonProps extends Omit<PressableProps, 'children' | 'style' | 'disabled'> {
-  /** The visible label. Also used as the screen-reader label unless `accessibilityLabel` is set. */
-  title: string;
+  /** The visible text. Also the screen-reader label unless `accessibilityLabel` is set. */
+  label: string;
   variant?: ButtonVariant;
   size?: ButtonSize;
   disabled?: boolean;
   /** Shows a spinner and ignores presses. The label stays so the width doesn't jump. */
   loading?: boolean;
+  /** Spans the width of its parent. Otherwise the parent decides (use `<Stack align="start">` to hug content). */
   fullWidth?: boolean;
 }
 
-const LABEL_VARIANT: Record<ButtonSize, NonNullable<TextProps['variant']>> = {
+const LABEL_VARIANT: Record<ButtonSize, TextVariant> = {
   small: 'label',
   medium: 'bodyStrong',
   large: 'bodyStrong',
 };
 
 export function Button({
-  title,
+  label,
   variant = 'primary',
   size = 'medium',
   loading = false,
@@ -48,32 +49,22 @@ export function Button({
   const slop = Math.max(0, (touchTarget - height) / 2);
   const solid = variant === 'primary' || variant === 'destructive';
 
-  const labelColor: TextColor = disabled
-    ? 'disabled'
-    : variant === 'primary'
-      ? 'onPrimary'
-      : variant === 'destructive'
-        ? 'inverse'
-        : 'link';
-
-  const solidFill = (pressed: boolean): string => {
-    if (variant === 'destructive') return pressed ? colors.action.destructivePressed : colors.action.destructive;
-    return pressed ? colors.action.primaryPressed : colors.action.primary;
-  };
+  // One colour per variant, shared by label, border and spinner so they can never disagree.
+  const accent = variant === 'destructive' ? colors.action.destructive : colors.action.primary;
+  const onSolid = variant === 'destructive' ? colors.action.onDestructive : colors.action.onPrimary;
+  const labelColor = disabled ? colors.text.disabled : solid ? onSolid : accent;
 
   const background = (pressed: boolean): string => {
     if (disabled) return solid ? colors.action.disabled : 'transparent';
-    if (solid) return solidFill(pressed);
+    if (variant === 'destructive') return pressed ? colors.action.destructivePressed : colors.action.destructive;
+    if (variant === 'primary') return pressed ? colors.action.primaryPressed : colors.action.primary;
     return pressed ? colors.action.subtle : 'transparent';
   };
-
-  const outlineColor = variant === 'destructive' ? colors.action.destructive : colors.action.primary;
-  const spinnerColor = variant === 'primary' ? colors.action.onPrimary : variant === 'destructive' ? colors.action.onDestructive : colors.action.primary;
 
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel ?? title}
+      accessibilityLabel={accessibilityLabel ?? label}
       accessibilityState={{ ...accessibilityState, disabled, busy: loading }}
       disabled={disabled}
       hitSlop={hitSlop ?? { top: slop, bottom: slop }}
@@ -83,7 +74,7 @@ export function Button({
         // minHeight, not height: at large text sizes the button must grow, not clip its label.
         minHeight: height,
         minWidth: touchTarget,
-        alignSelf: fullWidth ? 'stretch' : 'flex-start',
+        width: fullWidth ? '100%' : undefined,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -93,15 +84,15 @@ export function Button({
         borderRadius: radius.md,
         backgroundColor: background(pressed),
         borderWidth: variant === 'secondary' ? borderWidth.medium : borderWidth.none,
-        borderColor: disabled ? colors.border.default : outlineColor,
+        borderColor: disabled ? colors.border.default : accent,
         ...ringStyle,
       })}
       {...rest}
     >
-      {loading ? <ActivityIndicator color={spinnerColor} /> : null}
-      <Text variant={LABEL_VARIANT[size]} color={labelColor} style={{ flexShrink: 1, textAlign: 'center' }}>
-        {title}
-      </Text>
+      {loading ? <ActivityIndicator color={labelColor} /> : null}
+      <TextBase variant={LABEL_VARIANT[size]} colorValue={labelColor} style={{ flexShrink: 1, textAlign: 'center' }}>
+        {label}
+      </TextBase>
     </Pressable>
   );
 }

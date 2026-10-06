@@ -1,4 +1,5 @@
-import { contrastPairs, darkTheme, lightTheme } from '../src/theme/themes';
+import { contrastPairs } from '../src/dev/contrastPairs';
+import { darkTheme, lightTheme } from '../src/theme/themes';
 import { contrastRatio } from '../src/utils/contrast';
 
 let failures = 0;

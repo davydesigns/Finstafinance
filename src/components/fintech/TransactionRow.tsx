@@ -1,32 +1,40 @@
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
-import { Icon, IconTile, Text, useFocusRing, type IconName } from '@/components/core';
+import { Icon, IconTile, PressableSurface, Row, Stack, Text, type IconName } from '@/components/core';
+import { useLocale, useStrings, type Strings } from '@/i18n';
 import { useTheme } from '@/theme';
-import { spokenMoney } from '@/utils/money';
+import { formatDate } from '@/utils/date';
+import { spokenMoney, type Money } from '@/utils/money';
 
 import { MoneyText } from './MoneyText';
 import { StatusBadge } from './StatusBadge';
 
-export type TransactionType = 'purchase' | 'transfer' | 'deposit' | 'withdrawal' | 'fee' | 'refund';
+/** Categories the design system has an icon and label for. Any other string is allowed (see `typeLabel`). */
+export type TransactionKind = keyof Strings['transaction']['types'];
 export type TransactionStatus = 'completed' | 'pending' | 'failed';
 
-const TYPE: Record<TransactionType, { label: string; icon: IconName }> = {
-  purchase: { label: 'Purchase', icon: 'bag-handle' },
-  transfer: { label: 'Transfer', icon: 'swap-horizontal' },
-  deposit: { label: 'Deposit', icon: 'arrow-down-circle' },
-  withdrawal: { label: 'Withdrawal', icon: 'arrow-up-circle' },
-  fee: { label: 'Fee', icon: 'receipt' },
-  refund: { label: 'Refund', icon: 'return-up-back' },
+const KIND_ICON: Record<TransactionKind, IconName> = {
+  purchase: 'bag-handle',
+  transfer: 'swap-horizontal',
+  fee: 'receipt',
+  refund: 'return-up-back',
+  subscription: 'repeat',
 };
+
+function isKind(type: string, kinds: object): type is TransactionKind {
+  return type in kinds;
+}
 
 export interface TransactionRowProps {
   /** Merchant or payee name. */
   title: string;
   date: Date;
-  /** INTEGER MINOR UNITS. Negative = money out, positive = money in. */
-  amount: number;
-  currency: string;
-  type: TransactionType;
+  /** Direction comes from the sign: negative is money out, positive is money in. */
+  amount: Money;
+  /** A category. Known kinds get an icon and a translated label; others fall back to the direction. */
+  type?: TransactionKind | (string & {});
+  /** Overrides the label shown and spoken for `type`. */
+  typeLabel?: string;
   /** `completed` shows no badge; `pending` and `failed` do. Default `completed`. */
   status?: TransactionStatus;
   /** Overrides the icon implied by `type`. */
@@ -40,86 +48,75 @@ export function TransactionRow({
   title,
   date,
   amount,
-  currency,
   type,
+  typeLabel,
   status = 'completed',
   icon,
-  locale,
+  locale: localeOverride,
   onPress,
 }: TransactionRowProps) {
   const { colors, space, touchTarget, radius } = useTheme();
-  const { handlers, ringStyle } = useFocusRing();
-  const { label: typeLabel, icon: typeIcon } = TYPE[type];
+  const locale = useLocale(localeOverride);
+  const strings = useStrings();
   const failed = status === 'failed';
+  const credit = amount.minor > 0;
 
-  const shortDate = new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' }).format(date);
-  const longDate = new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
+  const known = type !== undefined && isKind(type, strings.transaction.types);
+  const label = typeLabel ?? (known ? strings.transaction.types[type] : credit ? strings.transaction.credit : strings.transaction.debit);
+  const glyph: IconName = icon ?? (known ? KIND_ICON[type] : credit ? 'arrow-down-circle' : 'arrow-up-circle');
+
+  const statusWord = status === 'pending' ? strings.transaction.pending : failed ? strings.transaction.failed : null;
 
   // One sentence for screen readers, instead of five separate stops.
   const spoken = [
     title,
-    typeLabel,
-    spokenMoney(amount, currency, { locale, signDisplay: 'always' }),
-    longDate,
-    status === 'completed' ? null : status,
+    label,
+    spokenMoney(amount, { locale, signDisplay: 'always', words: strings.money }),
+    formatDate(date, locale, 'long'),
+    statusWord,
   ]
     .filter(Boolean)
     .join(', ');
 
-  const content = (pressed: boolean) => (
-    <View
-      style={{
-        minHeight: touchTarget,
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: space[3],
-        paddingVertical: space[3],
-        paddingHorizontal: space[2],
-        borderRadius: radius.md,
-        backgroundColor: pressed ? colors.action.subtle : 'transparent',
-      }}
-    >
-      <IconTile name={icon ?? typeIcon} />
-      <View style={{ flex: 1, gap: space[1] }}>
-        <Text variant="bodyStrong" numberOfLines={2}>
-          {title}
-        </Text>
-        <Text variant="bodySmall" color="secondary" numberOfLines={2}>
-          {shortDate} · {typeLabel}
-        </Text>
-        {status === 'pending' ? <StatusBadge status="pending" label="Pending" /> : null}
-        {failed ? <StatusBadge status="error" label="Failed" /> : null}
-      </View>
-      <MoneyText
-        amount={amount}
-        currency={currency}
-        locale={locale}
-        signDisplay="always"
-        color={failed ? 'secondary' : amount > 0 ? 'success' : 'primary'}
-        style={failed ? { textDecorationLine: 'line-through' } : undefined}
-      />
-      {onPress ? <Icon name="chevron-forward" size="small" color="secondary" /> : null}
-    </View>
-  );
-
-  if (!onPress) {
-    return (
-      <View accessible accessibilityLabel={spoken}>
-        {content(false)}
-      </View>
-    );
-  }
-
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={spoken}
-      accessibilityHint="Opens transaction details"
-      onPress={onPress}
-      style={[{ borderRadius: radius.md }, ringStyle]}
-      {...handlers}
-    >
-      {({ pressed }) => content(pressed)}
-    </Pressable>
+    <PressableSurface label={spoken} hint={strings.transaction.opens} onPress={onPress} radius="md">
+      {(pressed) => (
+        <View
+          style={{
+            minHeight: touchTarget,
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: space[3],
+            paddingVertical: space[3],
+            paddingHorizontal: space[2],
+            borderRadius: radius.md,
+            backgroundColor: pressed ? colors.surface.pressed : 'transparent',
+          }}
+        >
+          <IconTile name={glyph} />
+          <Stack gap={1} align="start" style={{ flex: 1 }}>
+            <Text variant="bodyStrong" numberOfLines={2}>
+              {title}
+            </Text>
+            <Text variant="bodySmall" color="secondary" numberOfLines={2}>
+              {formatDate(date, locale, 'short')} · {label}
+            </Text>
+            {status === 'pending' ? <StatusBadge status="pending" label={strings.transaction.pending} /> : null}
+            {failed ? <StatusBadge status="danger" label={strings.transaction.failed} /> : null}
+          </Stack>
+          <Row gap={1}>
+            <MoneyText
+              amount={amount}
+              locale={locale}
+              signDisplay="always"
+              signTone={failed ? 'none' : 'credits'}
+              color={failed ? 'secondary' : undefined}
+              strikethrough={failed}
+            />
+            {onPress ? <Icon name="chevron-forward" size="small" color="secondary" /> : null}
+          </Row>
+        </View>
+      )}
+    </PressableSurface>
   );
 }

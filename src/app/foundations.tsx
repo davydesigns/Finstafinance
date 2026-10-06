@@ -1,40 +1,25 @@
-import { ScrollView, Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import {
-  contrastPairs,
-  useTheme,
-  type TypeVariant,
-} from '@/theme';
+import { Card, Row, Stack, Text } from '@/components/core';
+import { TextBase } from '@/components/core/Text';
+import { contrastPairs } from '@/dev/contrastPairs';
+import { GalleryScreen, Section } from '@/gallery/GalleryScreen';
 import { ThemeSwitcher } from '@/gallery/ThemeSwitcher';
+import { useTheme, type TypeVariant } from '@/theme';
 import { contrastRatio, wcagLevel } from '@/utils/contrast';
 
-/**
- * Foundations gallery. Uses plain React Native <Text>/<View> on purpose:
- * the design system's own Text and Card components don't exist yet (Phase 2).
- */
-
-function SectionTitle({ children }: { children: string }) {
-  const { colors, typography: t, space } = useTheme();
-  return (
-    <Text
-      accessibilityRole="header"
-      maxFontSizeMultiplier={t.heading2.maxFontSizeMultiplier}
-      style={[t.heading2, { color: colors.text.primary, marginTop: space[8], marginBottom: space[3] }]}
-    >
-      {children}
-    </Text>
-  );
-}
+/** Foundations gallery, built from the design system's own components and tokens. */
 
 function ContrastTable() {
-  const { colors, typography: t, space, radius } = useTheme();
+  const { colors, space, radius, borderWidth } = useTheme();
   return (
-    <View style={{ gap: space[2] }}>
+    <Stack gap={2}>
       {contrastPairs.map((pair) => {
         const fg = pair.fg(colors);
         const bg = pair.bg(colors);
         const ratio = contrastRatio(fg, bg);
         const pass = ratio >= pair.min;
+        // The cell must show the pair itself, so these two colours are the data being demonstrated.
         return (
           <View
             key={pair.label}
@@ -47,44 +32,45 @@ function ContrastTable() {
               padding: space[3],
               borderRadius: radius.md,
               backgroundColor: bg,
-              borderWidth: 1,
+              borderWidth: borderWidth.thin,
               borderColor: colors.border.default,
             }}
           >
-            <Text maxFontSizeMultiplier={t.bodySmall.maxFontSizeMultiplier} style={[t.bodySmall, { flex: 1, color: fg }]}>
+            <Text variant="bodySmall" style={{ flex: 1 }} color="primary" accessibilityElementsHidden>
               {pair.label}
             </Text>
             {/* Status is conveyed by the word, never colour alone. */}
-            <Text maxFontSizeMultiplier={t.caption.maxFontSizeMultiplier} style={[t.caption, { color: fg }]}>
+            <Text variant="caption" accessibilityElementsHidden>
               {ratio.toFixed(1)}:1 {pass ? (pair.min === 3 ? 'UI ✓' : wcagLevel(ratio)) : 'FAIL'}
             </Text>
           </View>
         );
       })}
-    </View>
+    </Stack>
   );
 }
 
 function Swatch({ label, color, onColor }: { label: string; color: string; onColor: string }) {
-  const { typography: t, space, radius, colors } = useTheme();
+  const { space, radius, borderWidth, colors, size } = useTheme();
   return (
     <View
       accessible
       accessibilityLabel={`${label}, ${color}`}
       style={{
         width: '48%',
-        minHeight: 72,
+        minHeight: size.minActionWidth - space[6],
         padding: space[3],
         borderRadius: radius.md,
         backgroundColor: color,
-        borderWidth: 1,
+        borderWidth: borderWidth.thin,
         borderColor: colors.border.default,
         justifyContent: 'flex-end',
       }}
     >
-      <Text maxFontSizeMultiplier={t.caption.maxFontSizeMultiplier} style={[t.caption, { color: onColor }]}>
+      {/* A swatch label sits on arbitrary colours, so its colour is passed explicitly. */}
+      <TextBase variant="caption" colorValue={onColor}>
         {label}
-      </Text>
+      </TextBase>
     </View>
   );
 }
@@ -97,103 +83,131 @@ function Palette() {
       <Swatch label="background.secondary" color={c.background.secondary} onColor={c.text.primary} />
       <Swatch label="surface.primary" color={c.surface.primary} onColor={c.text.primary} />
       <Swatch label="surface.elevated" color={c.surface.elevated} onColor={c.text.primary} />
+      <Swatch label="surface.pressed" color={c.surface.pressed} onColor={c.text.primary} />
+      <Swatch label="surface.accent" color={c.surface.accent} onColor={c.text.link} />
       <Swatch label="action.primary" color={c.action.primary} onColor={c.action.onPrimary} />
-      <Swatch label="action.subtle" color={c.action.subtle} onColor={c.action.onSubtle} />
+      <Swatch label="action.destructive" color={c.action.destructive} onColor={c.action.onDestructive} />
       <Swatch label="status.success" color={c.status.success.background} onColor={c.status.success.text} />
       <Swatch label="status.warning" color={c.status.warning.background} onColor={c.status.warning.text} />
       <Swatch label="status.danger" color={c.status.danger.background} onColor={c.status.danger.text} />
       <Swatch label="status.info" color={c.status.info.background} onColor={c.status.info.text} />
+      <Swatch label="status.neutral" color={c.status.neutral.background} onColor={c.status.neutral.text} />
     </View>
   );
 }
 
 function TypeScale() {
-  const { colors, typography, space } = useTheme();
+  const { typography } = useTheme();
   const variants = Object.keys(typography) as TypeVariant[];
   return (
-    <View style={{ gap: space[4] }}>
+    <Stack gap={4}>
       {variants.map((variant) => {
-        const style = typography[variant];
+        const { fontSize, lineHeight, fontWeight } = typography[variant];
+        const isMoney = variant === 'money' || variant === 'moneyLarge';
         return (
-          <View key={variant}>
-            <Text maxFontSizeMultiplier={typography.caption.maxFontSizeMultiplier} style={[typography.caption, { color: colors.text.secondary }]}>
-              {variant} · {style.fontSize}/{style.lineHeight} · {style.fontWeight}
+          <Stack key={variant} gap={0}>
+            <Text variant="caption" color="secondary">
+              {variant} · {fontSize}/{lineHeight} · {fontWeight}
             </Text>
-            <Text maxFontSizeMultiplier={style.maxFontSizeMultiplier} style={[style, { color: colors.text.primary }]}>
-              {variant.startsWith('money') ? '$12,480.50' : 'Your balance is safe'}
-            </Text>
-          </View>
+            {isMoney ? (
+              <Text variant="body">$12,480.50 (see MoneyText)</Text>
+            ) : (
+              <Text variant={variant}>Your balance is safe</Text>
+            )}
+          </Stack>
         );
       })}
-    </View>
+    </Stack>
   );
 }
 
 function SpacingRamp() {
-  const { colors, space, typography: t } = useTheme();
+  const { colors, space, radius } = useTheme();
   return (
-    <View style={{ gap: space[2] }}>
+    <Stack gap={2}>
       {Object.entries(space).map(([key, value]) => (
-        <View key={key} style={{ flexDirection: 'row', alignItems: 'center', gap: space[3] }}>
-          <Text maxFontSizeMultiplier={t.caption.maxFontSizeMultiplier} style={[t.caption, { width: 72, color: colors.text.secondary }]}>
+        <Row key={key} gap={3}>
+          <Text variant="caption" color="secondary" style={{ width: space[16] + space[4] }}>
             space[{key}] {value}
           </Text>
-          <View style={{ width: Math.max(value, 1), height: 12, backgroundColor: colors.action.primary, borderRadius: 2 }} />
-        </View>
+          {/* Bar length IS the token value: that is the demonstration. */}
+          <View style={{ width: Math.max(value, 1), height: space[3], backgroundColor: colors.action.primary, borderRadius: radius.sm }} />
+        </Row>
       ))}
-    </View>
+    </Stack>
   );
 }
 
 function RadiusAndElevation() {
-  const { colors, radius, elevation, space, typography: t } = useTheme();
+  const { colors, radius, elevation, space, borderWidth, controlHeight, size } = useTheme();
   return (
-    <>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space[3] }}>
+    <Stack gap={6}>
+      <Row gap={3} wrap align="start">
         {Object.entries(radius).map(([key, value]) => (
-          <View key={key} style={{ alignItems: 'center', gap: space[1] }}>
-            <View style={{ width: 56, height: 56, borderRadius: value, backgroundColor: colors.action.subtle, borderWidth: 2, borderColor: colors.action.primary }} />
-            <Text maxFontSizeMultiplier={t.caption.maxFontSizeMultiplier} style={[t.caption, { color: colors.text.secondary }]}>
+          <Stack key={key} gap={1} align="center">
+            <View
+              style={{
+                width: controlHeight.large,
+                height: controlHeight.large,
+                borderRadius: value,
+                backgroundColor: colors.surface.accent,
+                borderWidth: borderWidth.medium,
+                borderColor: colors.action.primary,
+              }}
+            />
+            <Text variant="caption" color="secondary">
               {key}
             </Text>
-          </View>
+          </Stack>
         ))}
-      </View>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space[4], marginTop: space[6] }}>
+      </Row>
+      <Row gap={4} wrap>
         {Object.entries(elevation).map(([key, style]) => (
           <View
             key={key}
             style={[
               style,
-              { width: 72, height: 72, borderRadius: radius.md, backgroundColor: colors.surface.elevated, alignItems: 'center', justifyContent: 'center' },
+              {
+                width: size.minActionWidth - space[6],
+                height: size.minActionWidth - space[6],
+                borderRadius: radius.md,
+                backgroundColor: colors.surface.elevated,
+                alignItems: 'center',
+                justifyContent: 'center',
+              },
             ]}
           >
-            <Text maxFontSizeMultiplier={t.caption.maxFontSizeMultiplier} style={[t.caption, { color: colors.text.primary }]}>
-              {key}
-            </Text>
+            <Text variant="caption">{key}</Text>
           </View>
         ))}
-      </View>
-    </>
+      </Row>
+    </Stack>
   );
 }
 
 export default function Foundations() {
-  const { space } = useTheme();
   return (
-    <ScrollView contentContainerStyle={{ padding: space[4], paddingBottom: space[16] }}>
-      <SectionTitle>Theme</SectionTitle>
-      <ThemeSwitcher />
-      <SectionTitle>Colour roles</SectionTitle>
-      <Palette />
-      <SectionTitle>Contrast (WCAG)</SectionTitle>
-      <ContrastTable />
-      <SectionTitle>Typography</SectionTitle>
-      <TypeScale />
-      <SectionTitle>Spacing</SectionTitle>
-      <SpacingRamp />
-      <SectionTitle>Radius and elevation</SectionTitle>
-      <RadiusAndElevation />
-    </ScrollView>
+    <GalleryScreen>
+      <Section title="Theme">
+        <ThemeSwitcher />
+      </Section>
+      <Section title="Colour roles">
+        <Palette />
+      </Section>
+      <Section title="Contrast (WCAG)" note="Defined in src/dev/contrastPairs.ts and enforced by npm test.">
+        <ContrastTable />
+      </Section>
+      <Section title="Typography">
+        <TypeScale />
+      </Section>
+      <Section title="Spacing">
+        <SpacingRamp />
+      </Section>
+      <Section title="Radius and elevation">
+        <Card variant="default">
+          <RadiusAndElevation />
+        </Card>
+      </Section>
+    </GalleryScreen>
   );
 }

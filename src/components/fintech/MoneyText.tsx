@@ -1,51 +1,66 @@
-import { Text, type TextColor, type TextProps } from '@/components/core';
-import { formatMoney, spokenMoney, type SignDisplay } from '@/utils/money';
+import type { StyleProp, TextProps as RNTextProps } from 'react-native';
 
-export interface MoneyTextProps extends Omit<TextProps, 'children' | 'color'> {
-  /** INTEGER MINOR UNITS: 1250 = $12.50. Negative = money out. */
-  amount: number;
-  /** ISO 4217 code, e.g. 'USD', 'EUR', 'JPY'. Symbol and decimals come from Intl. */
-  currency: string;
-  /** BCP 47 tag, e.g. 'de-DE'. Defaults to the device locale. */
+import { resolveTextColor, TextBase, type ColorChoice } from '@/components/core/Text';
+import type { TextLayoutStyle } from '@/components/core/layoutStyle';
+import { useLocale, useStrings } from '@/i18n';
+import { useTheme, type MoneyVariant } from '@/theme';
+import { formatMoney, spokenMoney, type Money, type SignDisplay } from '@/utils/money';
+
+/** Which directions get a status colour. Signs always show alongside, so colour is never the only cue. */
+export type SignTone = 'none' | 'credits' | 'both';
+
+export interface MoneyTextProps extends Omit<RNTextProps, 'style' | 'children'>, ColorChoice {
+  amount: Money;
+  /** BCP 47 override. Normally set once via <LocaleProvider>. */
   locale?: string;
-  /** `negative` (default) shows only a minus; `always` also shows + on credits. */
   signDisplay?: SignDisplay;
+  variant?: MoneyVariant;
   /** Hides the figure (privacy mode). A fixed mask is used so the size of the amount isn't leaked. */
   masked?: boolean;
-  /** Colour credits green and debits red. Signs always show too (`never` is upgraded to `always`), so colour is never the only cue. */
-  colorBySign?: boolean;
-  color?: TextColor;
+  /** `credits`: money in is green. `both`: money out is red too. Forces visible signs. */
+  signTone?: SignTone;
+  /** Struck through, e.g. for a failed transaction. */
+  strikethrough?: boolean;
+  style?: StyleProp<TextLayoutStyle>;
 }
 
 const MASK = '••••••';
 
 export function MoneyText({
   amount,
-  currency,
-  locale,
-  signDisplay: requestedSign = 'negative',
-  masked = false,
-  colorBySign = false,
-  color = 'primary',
+  locale: localeOverride,
+  signDisplay: requestedSign = 'auto',
   variant = 'money',
+  masked = false,
+  signTone = 'none',
+  strikethrough = false,
+  color,
+  tone,
+  style,
   ...rest
 }: MoneyTextProps) {
+  const { colors } = useTheme();
+  const locale = useLocale(localeOverride);
+  const strings = useStrings();
+
   // Colour must never be the only cue for credit vs debit, so colouring forces visible signs.
-  const signDisplay: SignDisplay = colorBySign && requestedSign === 'never' ? 'always' : requestedSign;
-  const resolvedColor: TextColor = colorBySign ? (amount > 0 ? 'success' : amount < 0 ? 'danger' : color) : color;
+  const signDisplay: SignDisplay = signTone !== 'none' && requestedSign === 'never' ? 'always' : requestedSign;
+  const resolvedTone =
+    amount.minor > 0 && signTone !== 'none' ? 'success' : amount.minor < 0 && signTone === 'both' ? 'danger' : tone;
 
   return (
-    <Text
+    <TextBase
       variant={variant}
-      color={resolvedColor}
-      // A split number can be misread, so a figure never wraps: it shrinks to fit instead (iOS/Android).
+      colorValue={resolveTextColor(colors, { color, tone: resolvedTone })}
+      // A split number can be misread, so a figure never wraps: it shrinks to fit (iOS/Android).
       numberOfLines={1}
       adjustsFontSizeToFit
       minimumFontScale={0.6}
-      accessibilityLabel={masked ? 'Amount hidden' : spokenMoney(amount, currency, { locale, signDisplay })}
+      accessibilityLabel={masked ? strings.money.hidden : spokenMoney(amount, { locale, signDisplay, words: strings.money })}
+      style={[strikethrough && { textDecorationLine: 'line-through' }, style]}
       {...rest}
     >
-      {masked ? MASK : formatMoney(amount, currency, { locale, signDisplay })}
-    </Text>
+      {masked ? MASK : formatMoney(amount, { locale, signDisplay })}
+    </TextBase>
   );
 }

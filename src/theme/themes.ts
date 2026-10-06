@@ -1,8 +1,9 @@
 import { palette as p } from './tokens/color';
 import { elevation } from './tokens/elevation';
 import { borderWidth } from './tokens/border';
-import { controlHeight, iconSize, touchTarget } from './tokens/layout';
+import { controlHeight, touchTarget } from './tokens/interaction';
 import { radius } from './tokens/radius';
+import { iconSize, size } from './tokens/size';
 import { space } from './tokens/spacing';
 import { fontSize, fontWeight, lineHeight, typography } from './tokens/typography';
 
@@ -30,6 +31,10 @@ export interface SemanticColors {
     primary: string;
     /** Content that floats above `primary` (raised cards, menus). */
     elevated: string;
+    /** A row or card while it is being pressed. */
+    pressed: string;
+    /** Soft accent fill behind icons and highlights. */
+    accent: string;
   };
   text: {
     primary: string;
@@ -50,7 +55,7 @@ export interface SemanticColors {
     primaryPressed: string;
     /** Label or icon on top of `primary`. */
     onPrimary: string;
-    /** Light tint: pressed state for secondary/tertiary actions, selected rows. */
+    /** Light tint behind secondary/tertiary actions while pressed. */
     subtle: string;
     onSubtle: string;
     /** Disabled controls are exempt from WCAG contrast rules but stay legible. */
@@ -73,7 +78,7 @@ export interface SemanticColors {
 
 const light: SemanticColors = {
   background: { primary: p.neutral50, secondary: p.neutral100 },
-  surface: { primary: p.white, elevated: p.white },
+  surface: { primary: p.white, elevated: p.white, pressed: p.blue50, accent: p.blue50 },
   text: {
     primary: p.neutral900,
     secondary: p.neutral600,
@@ -106,7 +111,7 @@ const light: SemanticColors = {
 const dark: SemanticColors = {
   background: { primary: p.neutral950, secondary: p.neutral900 },
   // In dark mode "higher" means lighter, because shadows are hard to see.
-  surface: { primary: p.neutral900, elevated: p.neutral800 },
+  surface: { primary: p.neutral900, elevated: p.neutral800, pressed: p.blue900, accent: p.blue900 },
   text: {
     primary: p.neutral50,
     secondary: p.neutral300,
@@ -151,71 +156,11 @@ export interface Theme {
   elevation: typeof elevation;
   touchTarget: number;
   controlHeight: typeof controlHeight;
+  size: typeof size;
   iconSize: typeof iconSize;
 }
 
-const shared = { space, radius, fontSize, lineHeight, fontWeight, typography, borderWidth, elevation, touchTarget, controlHeight, iconSize };
+const shared = { space, radius, fontSize, lineHeight, fontWeight, typography, borderWidth, elevation, touchTarget, controlHeight, size, iconSize };
 
 export const lightTheme: Theme = { name: 'light', colors: light, ...shared };
 export const darkTheme: Theme = { name: 'dark', colors: dark, ...shared };
-
-/**
- * Contrast contract. Each row is a foreground/background pair that real UI
- * will use, and the WCAG ratio it must meet: 4.5 for text, 3 for UI
- * boundaries and focus indicators. The foundations screen displays these,
- * and `npm run check:contrast` fails if any pair regresses.
- */
-export interface ContrastPair {
-  label: string;
-  fg: (c: SemanticColors) => string;
-  bg: (c: SemanticColors) => string;
-  min: 3 | 4.5;
-}
-
-export const contrastPairs: ContrastPair[] = [
-  { label: 'Primary text on background', fg: (c) => c.text.primary, bg: (c) => c.background.primary, min: 4.5 },
-  { label: 'Primary text on background (secondary)', fg: (c) => c.text.primary, bg: (c) => c.background.secondary, min: 4.5 },
-  { label: 'Primary text on surface', fg: (c) => c.text.primary, bg: (c) => c.surface.primary, min: 4.5 },
-  { label: 'Primary text on elevated surface', fg: (c) => c.text.primary, bg: (c) => c.surface.elevated, min: 4.5 },
-  { label: 'Secondary text on background', fg: (c) => c.text.secondary, bg: (c) => c.background.primary, min: 4.5 },
-  { label: 'Secondary text on surface', fg: (c) => c.text.secondary, bg: (c) => c.surface.primary, min: 4.5 },
-  { label: 'Secondary text on elevated surface', fg: (c) => c.text.secondary, bg: (c) => c.surface.elevated, min: 4.5 },
-  { label: 'Link on surface', fg: (c) => c.text.link, bg: (c) => c.surface.primary, min: 4.5 },
-  { label: 'Link on background', fg: (c) => c.text.link, bg: (c) => c.background.primary, min: 4.5 },
-  { label: 'Action label on primary', fg: (c) => c.action.onPrimary, bg: (c) => c.action.primary, min: 4.5 },
-  { label: 'Action label on primary (pressed)', fg: (c) => c.action.onPrimary, bg: (c) => c.action.primaryPressed, min: 4.5 },
-  { label: 'Inverse text on primary action', fg: (c) => c.text.inverse, bg: (c) => c.action.primary, min: 4.5 },
-  { label: 'Label on destructive action', fg: (c) => c.action.onDestructive, bg: (c) => c.action.destructive, min: 4.5 },
-  { label: 'Label on destructive action (pressed)', fg: (c) => c.action.onDestructive, bg: (c) => c.action.destructivePressed, min: 4.5 },
-  { label: 'Text on subtle action tint', fg: (c) => c.action.onSubtle, bg: (c) => c.action.subtle, min: 4.5 },
-  { label: 'Action as text on surface', fg: (c) => c.action.primary, bg: (c) => c.surface.primary, min: 4.5 },
-  { label: 'Success on its tint', fg: (c) => c.status.success.text, bg: (c) => c.status.success.background, min: 4.5 },
-  { label: 'Success on surface', fg: (c) => c.status.success.text, bg: (c) => c.surface.primary, min: 4.5 },
-  { label: 'Warning on its tint', fg: (c) => c.status.warning.text, bg: (c) => c.status.warning.background, min: 4.5 },
-  { label: 'Warning on surface', fg: (c) => c.status.warning.text, bg: (c) => c.surface.primary, min: 4.5 },
-  { label: 'Danger on its tint', fg: (c) => c.status.danger.text, bg: (c) => c.status.danger.background, min: 4.5 },
-  { label: 'Danger on surface', fg: (c) => c.status.danger.text, bg: (c) => c.surface.primary, min: 4.5 },
-  { label: 'Info on its tint', fg: (c) => c.status.info.text, bg: (c) => c.status.info.background, min: 4.5 },
-  { label: 'Info on surface', fg: (c) => c.status.info.text, bg: (c) => c.surface.primary, min: 4.5 },
-  { label: 'Neutral on its tint', fg: (c) => c.status.neutral.text, bg: (c) => c.status.neutral.background, min: 4.5 },
-  { label: 'Neutral on surface', fg: (c) => c.status.neutral.text, bg: (c) => c.surface.primary, min: 4.5 },
-  { label: 'Input border on surface', fg: (c) => c.border.strong, bg: (c) => c.surface.primary, min: 3 },
-  { label: 'Focus ring on surface', fg: (c) => c.border.focus, bg: (c) => c.surface.primary, min: 3 },
-  { label: 'Focus ring on background', fg: (c) => c.border.focus, bg: (c) => c.background.primary, min: 3 },
-  // Combinations components actually produce (added by accessibility audit)
-  { label: 'Link on subtle tint (pressed button/row)', fg: (c) => c.text.link, bg: (c) => c.action.subtle, min: 4.5 },
-  { label: 'Primary text on subtle tint (pressed row)', fg: (c) => c.text.primary, bg: (c) => c.action.subtle, min: 4.5 },
-  { label: 'Secondary text on subtle tint (pressed row)', fg: (c) => c.text.secondary, bg: (c) => c.action.subtle, min: 4.5 },
-  { label: 'Success on subtle tint (pressed row)', fg: (c) => c.status.success.text, bg: (c) => c.action.subtle, min: 4.5 },
-  { label: 'Success on background', fg: (c) => c.status.success.text, bg: (c) => c.background.primary, min: 4.5 },
-  { label: 'Danger on background (input errors)', fg: (c) => c.status.danger.text, bg: (c) => c.background.primary, min: 4.5 },
-  { label: 'Success on elevated surface', fg: (c) => c.status.success.text, bg: (c) => c.surface.elevated, min: 4.5 },
-  { label: 'Danger on elevated surface', fg: (c) => c.status.danger.text, bg: (c) => c.surface.elevated, min: 4.5 },
-  { label: 'Link on elevated surface', fg: (c) => c.text.link, bg: (c) => c.surface.elevated, min: 4.5 },
-  { label: 'Secondary text on subtle tint (icon tile)', fg: (c) => c.text.link, bg: (c) => c.action.subtle, min: 3 },
-  { label: 'Input border on background', fg: (c) => c.border.strong, bg: (c) => c.background.primary, min: 3 },
-  { label: 'Secondary button border on background', fg: (c) => c.action.primary, bg: (c) => c.background.primary, min: 3 },
-  { label: 'Focus ring on elevated surface', fg: (c) => c.border.focus, bg: (c) => c.surface.elevated, min: 3 },
-  { label: 'Primary action fill on background', fg: (c) => c.action.primary, bg: (c) => c.background.primary, min: 3 },
-  { label: 'Destructive fill on background', fg: (c) => c.action.destructive, bg: (c) => c.background.primary, min: 3 },
-];
