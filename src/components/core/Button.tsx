@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { AccessibilityInfo, ActivityIndicator, Platform, Pressable, type PressableProps, type ViewStyle } from 'react-native';
 
 import { useStrings } from '@/i18n';
-import { useTheme, type ControlSize, type TextVariant } from '@/theme';
+import { depthWhen, useTheme, type ControlSize, type TextVariant } from '@/theme';
 
 import { TextBase } from './Text';
 import { useFocusRing } from './useFocusRing';
@@ -43,7 +43,7 @@ export function Button({
   accessibilityState,
   ...rest
 }: ButtonProps) {
-  const { colors, space, radius, touchTarget, controlHeight, borderWidth } = useTheme();
+  const { colors, space, radius, touchTarget, controlHeight, borderWidth, depth } = useTheme();
   const { handlers, ringStyle } = useFocusRing(onFocus, onBlur);
   const strings = useStrings();
   const spokenLabel = accessibilityLabel ?? label;
@@ -94,6 +94,8 @@ export function Button({
         backgroundColor: background(pressed),
         borderWidth: variant === 'secondary' ? borderWidth.medium : borderWidth.none,
         borderColor: disabled ? colors.border.default : accent,
+        // Soft raises the button; pressing pushes it in. Disabled and tertiary stay flat.
+        ...(disabled || variant === 'tertiary' ? null : depthWhen(pressed, depth.control, depth, solid ? 'solid' : 'tint')),
         ...ringStyle,
       })}
       {...rest}

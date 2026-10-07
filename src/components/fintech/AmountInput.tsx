@@ -44,7 +44,7 @@ export function AmountInput({
   onBlur,
   ...rest
 }: AmountInputProps) {
-  const { name, colors, space, radius, typography, borderWidth, controlHeight } = useTheme();
+  const { name, colors, space, radius, typography, borderWidth, controlHeight, depth } = useTheme();
   const locale = useLocale(localeOverride);
   const strings = useStrings();
   const [focused, setFocused] = useState(false);
@@ -90,6 +90,8 @@ export function AmountInput({
           borderWidth: borderW,
           borderColor,
           backgroundColor: disabled ? colors.action.disabled : colors.surface.primary,
+          // Soft presses the field into the page; the 3:1 border above stays, because a field must be findable without shadows.
+          ...(disabled ? null : depth.field),
         }}
       >
         <TextBase

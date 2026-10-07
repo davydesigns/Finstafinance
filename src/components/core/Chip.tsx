@@ -1,6 +1,6 @@
 import { Pressable } from 'react-native';
 
-import { useTheme } from '@/theme';
+import { depthWhen, useTheme } from '@/theme';
 
 import { IconBase, type IconName } from './Icon';
 import { TextBase } from './Text';
@@ -20,7 +20,7 @@ export interface ChipProps {
 
 /** A compact pressable pill for suggestions and choices. 36pt tall with a 48pt tap area. */
 export function Chip({ label, icon, selected = false, tone = 'default', disabled = false, onPress, accessibilityHint }: ChipProps) {
-  const { colors, space, radius, controlHeight, touchTarget, borderWidth } = useTheme();
+  const { colors, space, radius, controlHeight, touchTarget, borderWidth, depth } = useTheme();
   const { handlers, ringStyle } = useFocusRing();
   const ai = tone === 'ai';
   const slop = (touchTarget - controlHeight.small) / 2;
@@ -50,6 +50,7 @@ export function Chip({ label, icon, selected = false, tone = 'default', disabled
         backgroundColor: background,
         borderWidth: pressed || selected ? borderWidth.medium : borderWidth.thin,
         borderColor: border,
+        ...(disabled ? null : depthWhen(pressed || selected, depth.control, depth)),
         ...ringStyle,
       })}
     >

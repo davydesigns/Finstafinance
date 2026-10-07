@@ -1,6 +1,6 @@
 import { Pressable, View } from 'react-native';
 
-import { useTheme } from '@/theme';
+import { depthWhen, useTheme } from '@/theme';
 
 import { TextBase } from './Text';
 import { useFocusRing } from './useFocusRing';
@@ -19,7 +19,7 @@ interface SegmentedControlProps<T extends string> {
 }
 
 function Segment({ label, selected, onPress }: { label: string; selected: boolean; onPress: () => void }) {
-  const { colors, radius, touchTarget, borderWidth } = useTheme();
+  const { colors, radius, touchTarget, borderWidth, depth } = useTheme();
   const { handlers, ringStyle } = useFocusRing();
   return (
     <Pressable
@@ -39,6 +39,8 @@ function Segment({ label, selected, onPress }: { label: string; selected: boolea
         backgroundColor: selected ? colors.action.primary : colors.surface.primary,
         borderWidth: borderWidth.thin,
         borderColor: selected ? colors.action.primary : colors.border.strong,
+        // Soft: raised until chosen, then pushed down flat. The solid fill still says "selected" on its own.
+        ...depthWhen(selected, depth.control, depth, 'solid'),
         ...ringStyle,
       }}
     >

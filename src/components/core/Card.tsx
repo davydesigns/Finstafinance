@@ -1,19 +1,21 @@
 import { View, type StyleProp, type ViewProps } from 'react-native';
 
-import { useTheme } from '@/theme';
+import { depthWhen, useTheme } from '@/theme';
 
 import type { LayoutStyle } from './layoutStyle';
 
-export type CardVariant = 'default' | 'elevated' | 'outlined';
+export type CardVariant = 'default' | 'elevated' | 'outlined' | 'inset';
 export type CardPadding = 'sm' | 'md' | 'lg' | 'xl';
 
 const PADDING = { sm: 2, md: 4, lg: 6, xl: 8 } as const;
 
 export interface CardProps extends Omit<ViewProps, 'style'> {
   /**
-   * `default`: filled surface, no border or shadow.
-   * `elevated`: floats above the page with a shadow (lighter surface in dark mode).
-   * `outlined`: flat with a border. Good for lists.
+   * `default`: a filled surface resting on the page.
+   * `elevated`: floats above the page (a shadow; a lighter surface in dark mode).
+   * `outlined`: the same, with a visible border. Good for lists.
+   * `inset`: a well pressed into the page, for grouped details. Clean shows it as a quiet band; Soft presses it in.
+   * Clean and Soft draw these differently from the same roles (see `depth` in the theme).
    */
   variant?: CardVariant;
   /** `sm` 8pt, `md` 16pt (default), `lg` 24pt, `xl` 32pt. */
@@ -28,9 +30,11 @@ export interface CardProps extends Omit<ViewProps, 'style'> {
 
 /** A themed container for grouping related content. */
 export function Card({ variant = 'default', padding = 'md', tone = 'default', pressed = false, style, ...rest }: CardProps) {
-  const { colors, radius, space, elevation, borderWidth } = useTheme();
+  const { colors, radius, space, depth, borderWidth } = useTheme();
   const ai = tone === 'ai';
-  const base = ai ? colors.ai.subtle : variant === 'elevated' ? colors.surface.elevated : colors.surface.primary;
+  const inset = variant === 'inset';
+  const base = ai ? colors.ai.subtle : inset ? colors.background.secondary : variant === 'elevated' ? colors.surface.elevated : colors.surface.primary;
+  const resting = inset ? depth.field : variant === 'elevated' ? depth.floating : depth.surface;
 
   return (
     <View
@@ -42,7 +46,7 @@ export function Card({ variant = 'default', padding = 'md', tone = 'default', pr
           borderWidth: variant === 'outlined' || ai ? borderWidth.thin : borderWidth.none,
           borderColor: ai ? colors.ai.border : colors.border.default,
         },
-        variant === 'elevated' ? elevation.medium : elevation.none,
+        depthWhen(pressed, resting, depth),
         style,
       ]}
       {...rest}
