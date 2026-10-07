@@ -23,16 +23,15 @@ function ThemedStack() {
           name="index"
           options={{ title: 'Finsta', headerTitle: () => <Logo size="small" color="primary" /> }}
         />
-        <Stack.Screen name="accounts" options={{ title: 'Accounts' }} />
+        {/* The demo banking app has its own frame (navigation, privacy mode), so it hides the stack header. */}
+        <Stack.Screen name="(app)" options={{ headerShown: false }} />
         <Stack.Screen name="soft" options={{ title: 'Soft (2.0)' }} />
         <Stack.Screen name="foundations" options={{ title: 'Foundations' }} />
         <Stack.Screen name="gallery" options={{ title: 'Gallery' }} />
         <Stack.Screen name="fintech" options={{ title: 'Fintech components' }} />
+        <Stack.Screen name="charts" options={{ title: 'Charts and states' }} />
+        <Stack.Screen name="playground" options={{ title: 'Playground' }} />
         <Stack.Screen name="ai" options={{ title: 'AI components' }} />
-        <Stack.Screen name="assistant" options={{ title: 'Assistant' }} />
-        <Stack.Screen name="insights" options={{ title: 'Insights' }} />
-        <Stack.Screen name="fraud" options={{ title: 'Security' }} />
-        <Stack.Screen name="ai-settings" options={{ title: 'AI and data' }} />
       </Stack>
     </>
   );

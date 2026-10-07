@@ -31,7 +31,7 @@ export function Sparkline({ values, label, width = 96, height = 32 }: SparklineP
   return (
     <View accessible accessibilityRole="image" accessibilityLabel={label} style={{ width, height }}>
       {hydrated ? (
-        <Svg width={width} height={height} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+        <Svg width={width} height={height}>
           <Polyline
             points={points.map((p) => `${p.x},${p.y}`).join(' ')}
             fill="none"

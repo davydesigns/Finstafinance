@@ -44,6 +44,13 @@ const GLYPHS = {
   'chevron-up': 'chevron-up',
   'eye-off': 'eye-off',
   stop: 'stop',
+  search: 'search',
+  eye: 'eye',
+  home: 'home',
+  'arrow-back': 'arrow-back',
+  'color-palette': 'color-palette',
+  'code-slash': 'code-slash',
+  grid: 'grid',
 } as const satisfies Record<string, React.ComponentProps<typeof Ionicons>['name']>;
 
 export type IconName = keyof typeof GLYPHS;

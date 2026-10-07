@@ -25,7 +25,7 @@ export function Stepper({ steps, current }: StepperProps) {
 
   return (
     <Stack gap={2} accessible accessibilityLabel={`${text}, ${steps[index]}`} accessibilityLiveRegion="polite">
-      <Row gap={1} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+      <Row gap={1} aria-hidden>
         {steps.map((step, i) => (
           <View
             key={step}

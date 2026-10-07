@@ -45,7 +45,7 @@ export function TextField({ label, value, onChangeText, helperText, errorText, i
   return (
     <Stack gap={2}>
       {/* Hidden from screen readers: the input's own label already says this. Otherwise it is read twice. */}
-      <Text variant="label" color={disabled ? 'disabled' : 'primary'} accessibilityElementsHidden importantForAccessibility="no">
+      <Text variant="label" color={disabled ? 'disabled' : 'primary'} aria-hidden>
         {label}
       </Text>
 
@@ -90,7 +90,8 @@ export function TextField({ label, value, onChangeText, helperText, errorText, i
           accessibilityHint={helperText}
           accessibilityState={{ disabled }}
           // minWidth 0 lets the field shrink with its box; otherwise a browser's built-in input width forces overflow on narrow screens.
-          style={[inputType, { flex: 1, minWidth: 0, color: disabled ? colors.text.disabled : colors.text.primary, paddingVertical: space[3] }]}
+          // outlineWidth 0: the box around it already shows focus (a thicker border in the focus colour), so the browser's own outline would be a second, clashing ring.
+          style={[inputType, { flex: 1, minWidth: 0, color: disabled ? colors.text.disabled : colors.text.primary, paddingVertical: space[3], outlineWidth: 0 }]}
           {...rest}
         />
       </Pressable>

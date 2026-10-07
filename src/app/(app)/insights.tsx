@@ -47,14 +47,14 @@ export default function Insights() {
 
         {visible('dining') ? (
           <InsightCard
-            title="Dining is up 23% this month"
-            summary="You've spent more on restaurants than your usual pattern."
-            amount={usd(41260)}
+            title="Dining is $30.15 over budget"
+            summary="You've spent more on restaurants than the $220 you set aside this month."
+            amount={usd(25015)}
             why={{
-              dataUsed: ['Checking •••• 4821, last 90 days'],
-              factors: ['14 restaurant purchases this month (usual: 9)', 'Your three largest were on weekends'],
+              dataUsed: ['Checking •••• 4821, this month'],
+              factors: ['5 dining purchases since October 1', 'Your largest was $124.60 at Osteria Luna on October 2'],
             }}
-            action={{ label: 'Set a dining budget', onPress: () => undefined }}
+            action={{ label: 'See dining transactions', onPress: () => router.push({ pathname: '/activity', params: { category: 'dining' } }) }}
             onDismiss={() => dismiss('dining')}
             onFeedback={(feedback) => setLastFeedback(JSON.stringify(feedback))}
             onChangeData={() => router.push('/ai-settings')}
@@ -72,7 +72,7 @@ export default function Insights() {
               dataUsed: ['Checking •••• 4821 balance', 'Recurring bills, last 6 months'],
               factors: ['Rent ($1,850) due Oct 28', 'Paychecks usually arrive on the 1st and 15th'],
             }}
-            action={{ label: 'Move money from Savings', onPress: () => undefined }}
+            action={{ label: 'Move money from Savings', onPress: () => router.push('/send') }}
             onDismiss={() => dismiss('balance')}
             onFeedback={(feedback) => setLastFeedback(JSON.stringify(feedback))}
             onChangeData={() => router.push('/ai-settings')}
@@ -82,13 +82,13 @@ export default function Insights() {
 
         {visible('subscriptions') ? (
           <InsightCard
-            title="Two video subscriptions overlap"
-            summary="You pay for two streaming services every month."
+            title="Subscriptions use 83% of your budget"
+            summary="Three monthly subscriptions add up to $49.97 of your $60 budget."
             why={{
-              dataUsed: ['Recurring payments, last 6 months'],
-              factors: ['Netflix $22.99 and another video service $15.99, both monthly'],
+              dataUsed: ['Recurring payments, this month'],
+              factors: ['Netflix $22.99, Apple iCloud+ $14.99 and Spotify $11.99, all monthly'],
             }}
-            action={{ label: 'Review subscriptions', onPress: () => undefined }}
+            action={{ label: 'See subscriptions', onPress: () => router.push({ pathname: '/activity', params: { category: 'subscriptions' } }) }}
             onDismiss={() => dismiss('subscriptions')}
             onFeedback={(feedback) => setLastFeedback(JSON.stringify(feedback))}
             onChangeData={() => router.push('/ai-settings')}

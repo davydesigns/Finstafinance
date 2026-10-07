@@ -53,6 +53,14 @@ with a real edge or fill kept wherever meaning depends on one. Components ask fo
 branches on the style. Soft steps aside to Clean when the device asks for more contrast. Open any page with
 `?style=soft` to see it. Full reasoning, evidence and limits: `docs/soft/01-accessible-neumorphism.md`.
 
+## The demo app and playground
+
+`/accounts`, `/send`, `/activity`, `/assistant` and `/fraud` are a small banking app built only from the system, on
+sample data: charts with text alternatives, budgets that never rely on colour, a four-step transfer with an extra
+check for larger amounts, search and filters, loading and empty states, and privacy mode. `/playground` lets you change
+a component's props and see the code and its accessibility facts (measured from the current theme).
+The reasoning is in `docs/demo/01-demo-app.md`.
+
 ## AI in banking
 
 AI additions are grounded in `docs/ai/01-research-brief.md` (desk research, with every claim traced to an evidence log and a confidence rating). Principles:

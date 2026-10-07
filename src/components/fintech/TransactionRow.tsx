@@ -40,6 +40,8 @@ export interface TransactionRowProps {
   /** Overrides the icon implied by `type`. */
   icon?: IconName;
   locale?: string;
+  /** Privacy mode: hides the amount, and says so to screen readers. */
+  masked?: boolean;
   /** Makes the row tappable (e.g. open details). */
   onPress?: () => void;
 }
@@ -53,6 +55,7 @@ export function TransactionRow({
   status = 'completed',
   icon,
   locale: localeOverride,
+  masked = false,
   onPress,
 }: TransactionRowProps) {
   const { colors, space, touchTarget, radius } = useTheme();
@@ -71,7 +74,7 @@ export function TransactionRow({
   const spoken = [
     title,
     label,
-    spokenMoney(amount, { locale, signDisplay: 'always', words: strings.money }),
+    masked ? strings.money.hidden : spokenMoney(amount, { locale, signDisplay: 'always', words: strings.money }),
     formatDate(date, locale, 'long'),
     statusWord,
   ]
@@ -112,6 +115,7 @@ export function TransactionRow({
               signTone={failed ? 'none' : 'credits'}
               color={failed ? 'secondary' : undefined}
               strikethrough={failed}
+              masked={masked}
             />
             {onPress ? <Icon name="chevron-forward" size="small" color="secondary" /> : null}
           </Row>

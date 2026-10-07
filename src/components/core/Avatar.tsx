@@ -22,8 +22,7 @@ export function Avatar({ name }: { name: string }) {
   const { colors, size, depth } = useTheme();
   return (
     <View
-      accessibilityElementsHidden
-      importantForAccessibility="no-hide-descendants"
+      aria-hidden
       style={[
         { width: size.avatar, height: size.avatar, borderRadius: size.avatar / 2, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.surface.accent },
         depth.control,

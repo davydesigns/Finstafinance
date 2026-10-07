@@ -41,18 +41,18 @@ export function Skeleton({ shape = 'line', width, height }: SkeletonProps) {
   const h = height ?? (shape === 'circle' ? size.avatar : shape === 'block' ? space[16] : space[4]);
   const w: DimensionValue = width ?? (shape === 'circle' ? h : '100%');
 
+  // aria-hidden goes on a plain View: on web, Animated components pass iOS/Android-only props straight to the DOM.
   return (
-    <Animated.View
-      accessibilityElementsHidden
-      importantForAccessibility="no-hide-descendants"
-      style={{
-        width: w,
-        height: h,
-        borderRadius: shape === 'circle' ? radius.full : shape === 'block' ? radius.lg : radius.sm,
-        backgroundColor: colors.background.secondary,
-        opacity,
-      }}
-    />
+    <View aria-hidden style={{ width: w, height: h }}>
+      <Animated.View
+        style={{
+          flex: 1,
+          borderRadius: shape === 'circle' ? radius.full : shape === 'block' ? radius.lg : radius.sm,
+          backgroundColor: colors.background.secondary,
+          opacity,
+        }}
+      />
+    </View>
   );
 }
 

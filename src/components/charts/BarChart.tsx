@@ -44,7 +44,7 @@ export function BarChart({ title, summary, data, highlight = 'max', height = 140
   return (
     <Stack gap={3}>
       <View accessible accessibilityRole="image" accessibilityLabel={`${title}. ${summary}`}>
-        <Row gap={2} align="end" accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+        <Row gap={2} align="end" aria-hidden>
           {data.map((datum, index) => {
             const on = index === highlighted;
             const barHeight = max > 0 ? Math.max(space[1], Math.round((datum.value / max) * height)) : space[1];
@@ -52,9 +52,12 @@ export function BarChart({ title, summary, data, highlight = 'max', height = 140
               <View key={datum.label} style={{ flex: 1, alignItems: 'center', gap: space[1] }}>
                 <View style={{ height: height + space[5], justifyContent: 'flex-end', alignItems: 'center', gap: space[1], width: '100%' }}>
                   {on ? (
-                    <TextBase variant="caption" colorValue={colors.text.primary} numberOfLines={1}>
-                      {datum.valueLabel}
-                    </TextBase>
+                    // Wider than its column on purpose, so a long figure is never cut off ("$25...").
+                    <View style={{ width: space[16], alignItems: 'center' }}>
+                      <TextBase variant="caption" colorValue={colors.text.primary} style={{ textAlign: 'center' }}>
+                        {datum.valueLabel}
+                      </TextBase>
+                    </View>
                   ) : null}
                   <View
                     style={[
