@@ -41,6 +41,8 @@ export interface TypeStyle {
   fontWeight: NonNullable<TextStyle['fontWeight']>;
   letterSpacing?: number;
   fontVariant?: TextStyle['fontVariant'];
+  /** `mono` is resolved to the platform's monospaced face by `Text`. Tokens stay platform-free so Node scripts can load them. */
+  family?: 'mono';
   /**
    * Caps how far the user's system text-size setting can scale this style.
    * WCAG asks for text to reach 200%. Everything up to 22pt allows 2x. Only
@@ -62,6 +64,8 @@ export const typography = {
   bodySmall: { fontSize: fontSize[14], lineHeight: lineHeight[14], fontWeight: fontWeight.regular, maxFontSizeMultiplier: 2 },
   label: { fontSize: fontSize[14], lineHeight: lineHeight[14], fontWeight: fontWeight.semibold, maxFontSizeMultiplier: 2 },
   caption: { fontSize: fontSize[12], lineHeight: lineHeight[12], fontWeight: fontWeight.medium, letterSpacing: 0.2, maxFontSizeMultiplier: 2 },
+  /** Code and identifiers: a monospaced face, so tokens and snippets line up. */
+  code: { fontSize: fontSize[14], lineHeight: lineHeight[14], fontWeight: fontWeight.regular, family: 'mono', maxFontSizeMultiplier: 2 },
   /** Money: tabular numerals keep digits aligned in columns. */
   moneyLarge: { fontSize: fontSize[36], lineHeight: lineHeight[36], fontWeight: fontWeight.bold, letterSpacing: -0.5, fontVariant: tabular, maxFontSizeMultiplier: 1.5 },
   money: { fontSize: fontSize[16], lineHeight: lineHeight[16], fontWeight: fontWeight.semibold, fontVariant: tabular, maxFontSizeMultiplier: 2 },

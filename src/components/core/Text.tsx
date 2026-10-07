@@ -1,6 +1,6 @@
-import { Text as RNText, type StyleProp, type TextProps as RNTextProps, type TextStyle } from 'react-native';
+import { Platform, Text as RNText, type StyleProp, type TextProps as RNTextProps, type TextStyle } from 'react-native';
 
-import { useTheme, type MoneyVariant, type SemanticColors, type TextVariant, type TypeVariant } from '@/theme';
+import { useTheme, type MoneyVariant, type SemanticColors, type TextVariant, type TypeStyle, type TypeVariant } from '@/theme';
 
 import type { TextLayoutStyle } from './layoutStyle';
 
@@ -32,6 +32,9 @@ export function resolveTextColor(colors: SemanticColors, { color = 'primary', to
  * type style and an already-resolved colour. `Text` and `MoneyText` are the
  * public faces; `Button` uses it for colours that are not text roles.
  */
+/** The platform's monospaced face, for code and identifiers. */
+const MONO = Platform.select({ ios: 'Menlo', android: 'monospace', default: 'ui-monospace, Menlo, Consolas, monospace' });
+
 export interface TextBaseProps extends Omit<RNTextProps, 'style'> {
   variant: TypeVariant;
   colorValue: string;
@@ -41,12 +44,12 @@ export interface TextBaseProps extends Omit<RNTextProps, 'style'> {
 export function TextBase({ variant, colorValue, style, maxFontSizeMultiplier, ...rest }: TextBaseProps) {
   const { typography } = useTheme();
   // `maxFontSizeMultiplier` is a Text prop, not a style, so we pull it out.
-  const { maxFontSizeMultiplier: defaultCap, ...typeStyle } = typography[variant];
+  const { maxFontSizeMultiplier: defaultCap, family, ...typeStyle } = typography[variant] as TypeStyle;
 
   return (
     <RNText
       maxFontSizeMultiplier={maxFontSizeMultiplier ?? defaultCap}
-      style={[typeStyle, { color: colorValue }, style]}
+      style={[typeStyle, family === 'mono' ? { fontFamily: MONO } : null, { color: colorValue }, style]}
       {...rest}
     />
   );

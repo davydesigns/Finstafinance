@@ -6,6 +6,13 @@ export interface Strings {
   money: { hidden: string; plus: string; minus: string };
   input: { error: string };
   button: { loading: string };
+  /** Spoken while content is being fetched. */
+  loading: { label: string };
+  chart: { viewAsTable: string };
+  /** {current} and {total} are replaced with numbers. */
+  stepper: { step: string };
+  /** {percent} is replaced with a number. */
+  progress: { percent: string };
   account: {
     availableBalance: string;
     balanceHidden: string;
@@ -61,6 +68,10 @@ export const defaultStrings: Strings = {
   money: { hidden: 'Amount hidden', plus: 'plus', minus: 'minus' },
   input: { error: 'error' },
   button: { loading: 'Loading' },
+  loading: { label: 'Loading' },
+  chart: { viewAsTable: 'View as table' },
+  stepper: { step: 'Step {current} of {total}' },
+  progress: { percent: '{percent} percent' },
   account: {
     availableBalance: 'Available balance',
     balanceHidden: 'hidden',
