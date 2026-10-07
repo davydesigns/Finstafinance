@@ -48,3 +48,8 @@ Pick the colour for the surface it sits on: `primary` (page or card), `brand` (h
 a token that is already in the contrast contract. Use `decorative` when the brand name is announced
 next to it, and `showName` for the lockup. App icon, adaptive icon, favicon and splash in `assets/`
 are generated from the same vector (white mark on brand blue `#2557BD`).
+
+## Licence
+
+Code: MIT (see `LICENSE`). The Davy Designs name, logo and the files derived from it are **not**
+covered by that licence and are all rights reserved: see `NOTICE.md`.
