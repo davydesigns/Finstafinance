@@ -1,6 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
+import { View } from 'react-native';
 
 import { useTheme, type IconSize } from '@/theme';
+import { useHydrated } from '@/utils/useHydrated';
 
 import { resolveTextColor, type ColorChoice } from './Text';
 
@@ -32,7 +34,8 @@ export type IconName = keyof typeof GLYPHS;
 
 // Start loading the font as soon as the design system loads, so icons rarely appear late.
 // Fire and forget: nothing waits on it, and a failure just means icons stay blank.
-void Ionicons.loadFont?.()?.catch(() => undefined);
+// Skipped while the static web build renders on a server, where there is no window to load into.
+if (typeof window !== 'undefined') void Ionicons.loadFont?.()?.catch(() => undefined);
 
 export interface IconProps extends ColorChoice {
   name: IconName;
@@ -46,6 +49,8 @@ export interface IconProps extends ColorChoice {
  */
 export function Icon({ name, size = 'medium', color, tone }: IconProps) {
   const { colors, iconSize } = useTheme();
+  // The server can't load the icon font, so it builds an empty box. The browser's first render must match it.
+  if (!useHydrated()) return <View style={{ width: iconSize[size], height: iconSize[size] }} />;
   return (
     <Ionicons
       name={GLYPHS[name]}

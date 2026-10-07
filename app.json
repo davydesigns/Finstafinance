@@ -19,7 +19,14 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/favicon.png",
+      "name": "Davy Designs: Fintech Design System",
+      "shortName": "Davy Designs",
+      "description": "A production-quality React Native fintech design system: tokens, light and dark themes, accessible components and patterns. Built by Davy Designs.",
+      "themeColor": "#2557BD",
+      "backgroundColor": "#F6F8FB"
     },
     "plugins": [
       "expo-router",

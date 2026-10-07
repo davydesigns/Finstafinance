@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router';
+import Head from 'expo-router/head';
 import { StatusBar } from 'expo-status-bar';
 
 import { Logo } from '@/components/core';
@@ -35,6 +36,9 @@ export default function RootLayout() {
   return (
     <ThemeProvider>
       <LocaleProvider>
+        <Head>
+          <title>Davy Designs: Fintech Design System</title>
+        </Head>
         <ThemedStack />
       </LocaleProvider>
     </ThemeProvider>

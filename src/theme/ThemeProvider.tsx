@@ -1,6 +1,8 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
 import { useColorScheme } from 'react-native';
 
+import { useHydrated } from '@/utils/useHydrated';
+
 import { darkTheme, lightTheme, type Theme } from './themes';
 
 export type ThemePreference = 'system' | 'light' | 'dark';
@@ -14,13 +16,16 @@ interface ThemeContextValue {
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
+  // On web, the server-built HTML is light, so the first render must be too. See useHydrated.
+  const hydrated = useHydrated();
   const systemScheme = useColorScheme();
   const [preference, setPreference] = useState<ThemePreference>('system');
 
   const value = useMemo<ThemeContextValue>(() => {
-    const resolved = preference === 'system' ? (systemScheme === 'dark' ? 'dark' : 'light') : preference;
+    const system = hydrated && systemScheme === 'dark' ? 'dark' : 'light';
+    const resolved = preference === 'system' ? system : preference;
     return { theme: resolved === 'dark' ? darkTheme : lightTheme, preference, setPreference };
-  }, [preference, systemScheme]);
+  }, [preference, systemScheme, hydrated]);
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }

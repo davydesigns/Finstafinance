@@ -1,5 +1,7 @@
 import { createContext, useContext, useMemo, type ReactNode } from 'react';
 
+import { useHydrated } from '@/utils/useHydrated';
+
 import { defaultStrings, mergeStrings, type DeepPartial, type Strings } from './strings';
 
 interface LocaleContextValue {
@@ -22,7 +24,10 @@ interface LocaleProviderProps {
 
 /** Set once near the root, so components never need a `locale` prop. */
 export function LocaleProvider({ locale, strings, children }: LocaleProviderProps) {
-  const value = useMemo(() => ({ locale, strings: mergeStrings(strings) }), [locale, strings]);
+  // The server formats in en-US, so on web the first render must too. See useHydrated.
+  const hydrated = useHydrated();
+  const effective = hydrated ? locale : (locale ?? 'en-US');
+  const value = useMemo(() => ({ locale: effective, strings: mergeStrings(strings) }), [effective, strings]);
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;
 }
 

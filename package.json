@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "expo-router/entry",
   "dependencies": {
+    "@expo/metro-runtime": "~57.0.16",
     "@expo/vector-icons": "^15.0.2",
     "expo": "~57.0.27",
     "expo-asset": "~57.0.19",
@@ -25,6 +26,7 @@
     "@types/jest": "^29.5.14",
     "@types/node": "^20.19.43",
     "@types/react": "~19.2.2",
+    "@types/react-dom": "^19.2.3",
     "eslint": "^9.0.0",
     "eslint-config-expo": "~57.0.2",
     "jest": "^29.7.0",
@@ -43,7 +45,8 @@
     "lint": "expo lint",
     "check:contrast": "tsx scripts/check-contrast.ts",
     "test": "jest",
-    "check": "npm run typecheck && npm run lint && npm test"
+    "check": "npm run typecheck && npm run lint && npm test",
+    "build:web": "expo export --platform web"
   },
   "private": true,
   "jest": {
@@ -66,5 +69,8 @@
       ]
     }
   },
-  "license": "SEE LICENSE IN LICENSE"
+  "license": "SEE LICENSE IN LICENSE",
+  "engines": {
+    "node": ">=20"
+  }
 }
