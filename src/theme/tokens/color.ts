@@ -19,6 +19,19 @@ export const palette = {
   blue900: '#122B58',
   blue950: '#0C1D3B',
 
+  // Violet: reserved for AI-originated content, so it is always recognisable and never confused
+  // with the brand blue (actions) or the status colours.
+  violet50: '#F4F1FF',
+  violet100: '#E8E1FF',
+  violet200: '#D2C6FF',
+  violet300: '#B5A3FF',
+  violet400: '#9A83F5',
+  violet600: '#5B3FD9',
+  violet700: '#4A2FB8',
+  violet800: '#3B2590',
+  violet900: '#2A1B6B',
+  violet950: '#1B1145',
+
   // Green: money in, success, confirmation
   green50: '#ECF8F1',
   green100: '#D2F0DE',

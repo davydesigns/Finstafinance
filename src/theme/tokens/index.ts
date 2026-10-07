@@ -14,3 +14,4 @@ export { touchTarget, controlHeight } from './interaction';
 export type { ControlSize } from './interaction';
 export { size, iconSize, logoHeight, breakpoint, breakpointFor } from './size';
 export type { IconSize, LogoSize, Breakpoint } from './size';
+export { motion } from './motion';

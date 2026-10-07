@@ -28,6 +28,22 @@ const GLYPHS = {
   card: 'card',
   'trending-up': 'trending-up',
   repeat: 'repeat',
+  sparkles: 'sparkles',
+  'shield-checkmark': 'shield-checkmark',
+  'information-circle': 'information-circle',
+  'thumbs-up': 'thumbs-up',
+  'thumbs-down': 'thumbs-down',
+  person: 'person',
+  'chatbubble-ellipses': 'chatbubble-ellipses',
+  'trending-down': 'trending-down',
+  'lock-closed': 'lock-closed',
+  options: 'options',
+  close: 'close',
+  send: 'send',
+  'chevron-down': 'chevron-down',
+  'chevron-up': 'chevron-up',
+  'eye-off': 'eye-off',
+  stop: 'stop',
 } as const satisfies Record<string, React.ComponentProps<typeof Ionicons>['name']>;
 
 export type IconName = keyof typeof GLYPHS;

@@ -3,6 +3,7 @@ import { elevation } from './tokens/elevation';
 import { borderWidth } from './tokens/border';
 import { controlHeight, touchTarget } from './tokens/interaction';
 import { radius } from './tokens/radius';
+import { motion } from './tokens/motion';
 import { iconSize, logoHeight, size } from './tokens/size';
 import { space } from './tokens/spacing';
 import { typography } from './tokens/typography';
@@ -65,6 +66,23 @@ export interface SemanticColors {
     onDestructive: string;
     disabled: string;
   };
+  /** Everything that originates from an AI system. One hue, so it is always recognisable. */
+  ai: {
+    /** AI label text and icons. */
+    accent: string;
+    /** Soft fill behind AI-generated content. */
+    subtle: string;
+    /** Text on `subtle`. */
+    onSubtle: string;
+    /** A visible edge for AI surfaces (non-text, 3:1 against the page). */
+    border: string;
+  };
+  /** How sure an AI output is, in three categories. Always paired with a word and a shape. */
+  confidence: {
+    high: StatusColors;
+    medium: StatusColors;
+    low: StatusColors;
+  };
   status: {
     success: StatusColors;
     warning: StatusColors;
@@ -96,6 +114,12 @@ const light: SemanticColors = {
     destructivePressed: p.red900,
     onDestructive: p.white,
     disabled: p.neutral100,
+  },
+  ai: { accent: p.violet700, subtle: p.violet50, onSubtle: p.violet800, border: p.violet600 },
+  confidence: {
+    high: { text: p.green700, background: p.green50 },
+    medium: { text: p.blue700, background: p.blue50 },
+    low: { text: p.amber800, background: p.amber50 },
   },
   status: {
     success: { text: p.green700, background: p.green50 },
@@ -129,6 +153,12 @@ const dark: SemanticColors = {
     onDestructive: p.neutral950,
     disabled: p.neutral800,
   },
+  ai: { accent: p.violet300, subtle: p.violet950, onSubtle: p.violet100, border: p.violet400 },
+  confidence: {
+    high: { text: p.green300, background: p.green950 },
+    medium: { text: p.blue200, background: p.blue900 },
+    low: { text: p.amber300, background: p.amber950 },
+  },
   status: {
     success: { text: p.green300, background: p.green950 },
     warning: { text: p.amber300, background: p.amber950 },
@@ -153,9 +183,10 @@ export interface Theme {
   size: typeof size;
   iconSize: typeof iconSize;
   logoHeight: typeof logoHeight;
+  motion: typeof motion;
 }
 
-const shared = { space, radius, typography, borderWidth, elevation, touchTarget, controlHeight, size, iconSize, logoHeight };
+const shared = { space, radius, typography, borderWidth, elevation, touchTarget, controlHeight, size, iconSize, logoHeight, motion };
 
 export const lightTheme: Theme = { name: 'light', colors: light, ...shared };
 export const darkTheme: Theme = { name: 'dark', colors: dark, ...shared };
