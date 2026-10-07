@@ -9,6 +9,11 @@ const ENTRIES: { href: Href; title: string; subtitle: string }[] = [
   { href: '/foundations', title: 'Foundations', subtitle: 'Colour, type, spacing, radius, elevation' },
   { href: '/gallery', title: 'Design System Gallery', subtitle: 'Text, Button and Card: every variation' },
   { href: '/fintech', title: 'Fintech components', subtitle: 'MoneyText, AccountCard, TransactionRow, AmountInput, StatusBadge' },
+  { href: '/ai', title: 'AI components', subtitle: 'AI tokens, primitives and fintech components' },
+  { href: '/assistant', title: 'AI assistant (pattern)', subtitle: 'Disclosure, streaming, payment proposals, escalation to a person' },
+  { href: '/insights', title: 'Insights (pattern)', subtitle: 'Proactive AI insights that explain themselves' },
+  { href: '/fraud', title: 'Fraud alert (pattern)', subtitle: 'Specific, balanced, always with a person one tap away' },
+  { href: '/ai-settings', title: 'AI and data controls (pattern)', subtitle: 'Consent you can see, change and erase' },
 ];
 
 export default function GalleryHome() {

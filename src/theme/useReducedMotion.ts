@@ -9,7 +9,8 @@ export function useReducedMotion(): boolean {
     let active = true;
     AccessibilityInfo.isReduceMotionEnabled?.()
       .then((enabled) => {
-        if (active) setReduced(enabled);
+        // Only update when motion IS reduced: the default is already false, so there is nothing to change otherwise.
+        if (active && enabled) setReduced(true);
       })
       .catch(() => undefined);
     const subscription = AccessibilityInfo.addEventListener?.('reduceMotionChanged', setReduced);

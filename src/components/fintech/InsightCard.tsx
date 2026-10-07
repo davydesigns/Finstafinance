@@ -5,6 +5,7 @@ import { Button, Card, Disclosure, Row, Stack, Text } from '@/components/core';
 import { useStrings } from '@/i18n';
 import type { Money } from '@/utils/money';
 
+import { MoneyRangeText } from './MoneyRangeText';
 import { MoneyText } from './MoneyText';
 
 export interface InsightCardProps {
@@ -12,6 +13,8 @@ export interface InsightCardProps {
   summary: string;
   /** The one figure the insight is about. */
   amount?: Money;
+  /** A forecast. Shown as a range with an "Estimate" label, never as a single number. */
+  range?: { low: Money; high: Money };
   /** Only pass confidence when it can change what the customer does. */
   confidence?: ConfidenceLevel;
   /** The evidence behind it. Without this, the card cannot explain itself, so provide it. */
@@ -47,6 +50,7 @@ export function InsightCard({
   title,
   summary,
   amount,
+  range,
   confidence,
   why,
   action,
@@ -70,6 +74,7 @@ export function InsightCard({
 
         <Text variant="heading3">{title}</Text>
         {amount ? <MoneyText variant="moneyLarge" amount={amount} locale={locale} /> : null}
+        {range ? <MoneyRangeText variant="moneyLarge" low={range.low} high={range.high} locale={locale} /> : null}
         <Text color="secondary">{summary}</Text>
         {confidence ? <ConfidenceIndicator level={confidence} /> : null}
         {action ? <Button label={action.label} fullWidth onPress={action.onPress} /> : null}

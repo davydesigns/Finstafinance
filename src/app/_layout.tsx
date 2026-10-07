@@ -27,6 +27,11 @@ function ThemedStack() {
         <Stack.Screen name="foundations" options={{ title: 'Foundations' }} />
         <Stack.Screen name="gallery" options={{ title: 'Gallery' }} />
         <Stack.Screen name="fintech" options={{ title: 'Fintech components' }} />
+        <Stack.Screen name="ai" options={{ title: 'AI components' }} />
+        <Stack.Screen name="assistant" options={{ title: 'Assistant' }} />
+        <Stack.Screen name="insights" options={{ title: 'Insights' }} />
+        <Stack.Screen name="fraud" options={{ title: 'Security' }} />
+        <Stack.Screen name="ai-settings" options={{ title: 'AI and data' }} />
       </Stack>
     </>
   );
