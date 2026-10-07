@@ -47,10 +47,11 @@ export interface Strings {
     estimate: string;
     /** {low} and {high} are replaced with formatted amounts. */
     range: string;
-    proposal: { title: string; aiDrafted: string; nothingSent: string; confirm: string; edit: string; cancel: string };
+    proposal: { title: string; aiDrafted: string; nothingSent: string; confirm: string; edit: string; cancel: string; to: string; from: string; amount: string; when: string };
     fraud: { title: string; itsMe: string; notMe: string; reason: string };
     data: { remove: string; scope: string; on: string; off: string };
-    handoff: { waitPrefix: string; callback: string };
+    /** {minutes} is replaced with a number. */
+    handoff: { wait: string; callback: string; reason: string };
     dismiss: string;
   };
 }
@@ -114,10 +115,14 @@ export const defaultStrings: Strings = {
       confirm: 'Confirm and send',
       edit: 'Edit',
       cancel: 'Cancel',
+      to: 'To',
+      from: 'From',
+      amount: 'Amount',
+      when: 'When',
     },
     fraud: { title: 'Is this you?', itsMe: "Yes, it's me", notMe: 'No, secure my account', reason: 'Why we flagged it' },
     data: { remove: 'Remove my data', scope: 'Used for', on: 'On', off: 'Off' },
-    handoff: { waitPrefix: 'Typical wait', callback: 'Or we can call you back' },
+    handoff: { wait: 'Typical wait: about {minutes} min', callback: 'Or we can call you back', reason: 'This needs a person' },
     dismiss: 'Dismiss',
   },
 };

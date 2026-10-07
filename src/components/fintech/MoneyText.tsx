@@ -1,9 +1,10 @@
-import { Platform, type StyleProp, type TextProps as RNTextProps, type TextStyle } from 'react-native';
+import type { StyleProp, TextProps as RNTextProps } from 'react-native';
 
 import { resolveTextColor, TextBase, type ColorChoice } from '@/components/core/Text';
 import type { TextLayoutStyle } from '@/components/core/layoutStyle';
 import { useLocale, useStrings } from '@/i18n';
 import { useTheme, type MoneyVariant } from '@/theme';
+import { FIGURE_PROPS, WEB_NO_WRAP } from './figure';
 import { formatMoney, spokenMoney, type Money, type SignDisplay } from '@/utils/money';
 
 /** Which directions get a status colour. Signs always show alongside, so colour is never the only cue. */
@@ -25,10 +26,6 @@ export interface MoneyTextProps extends Omit<RNTextProps, 'style' | 'children'>,
 }
 
 const MASK = '••••••';
-
-// Web has no shrink-to-fit, and ellipsis would hide digits. Never wrap, never cut: let the figure overflow
-// visibly instead. (`whiteSpace` is a web-only style, so React Native's types don't list it.)
-const WEB_NO_WRAP = (Platform.OS === 'web' ? { whiteSpace: 'nowrap' } : undefined) as TextStyle | undefined;
 
 export function MoneyText({
   amount,
@@ -56,10 +53,7 @@ export function MoneyText({
     <TextBase
       variant={variant}
       colorValue={resolveTextColor(colors, { color, tone: resolvedTone })}
-      // A split number can be misread, so a figure never wraps: it shrinks to fit (iOS/Android).
-      numberOfLines={Platform.OS === 'web' ? undefined : 1}
-      adjustsFontSizeToFit
-      minimumFontScale={0.6}
+      {...FIGURE_PROPS}
       accessibilityLabel={masked ? strings.money.hidden : spokenMoney(amount, { locale, signDisplay, words: strings.money })}
       style={[WEB_NO_WRAP, strikethrough && { textDecorationLine: 'line-through' }, style]}
       {...rest}
