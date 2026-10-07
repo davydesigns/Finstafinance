@@ -21,7 +21,7 @@ function ThemedStack() {
       >
         <Stack.Screen
           name="index"
-          options={{ title: 'Davy Designs', headerTitle: () => <Logo size="small" color="primary" showName /> }}
+          options={{ title: 'Finsta', headerTitle: () => <Logo size="small" color="primary" /> }}
         />
         <Stack.Screen name="accounts" options={{ title: 'Accounts' }} />
         <Stack.Screen name="foundations" options={{ title: 'Foundations' }} />
@@ -42,7 +42,7 @@ export default function RootLayout() {
     <ThemeProvider>
       <LocaleProvider>
         <Head>
-          <title>Davy Designs: Fintech Design System</title>
+          <title>Finsta: Fintech Design System</title>
         </Head>
         <ThemedStack />
       </LocaleProvider>

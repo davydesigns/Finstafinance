@@ -16,7 +16,7 @@ npm run check            # typecheck + lint + tests (run before every commit)
   The raw `palette` is **not** exported; only `themes.ts` may import it (ESLint enforces this).
 - `src/theme/themes.ts`: semantic roles (`text.primary`, `action.primary`, `status.success.text`) for light and dark.
 - `src/i18n/`: `LocaleProvider` sets locale once; every built-in string can be overridden.
-- `src/components/core/`: Text, Button, Card, Icon, Logo, Screen, Stack/Row, PressableSurface, SegmentedControl.
+- `src/components/core/`: Text, Button, Card, Icon, Logo, DesignedBy, Screen, Stack/Row, PressableSurface, SegmentedControl.
 - `src/components/fintech/`: MoneyText, StatusBadge, TransactionRow, AccountCard, AmountInput, plus the AI set: MoneyRangeText, InsightCard, ActionProposalCard, FraudAlertCard, DataUseRow, HumanHandoff.
 - `src/components/ai/`: AILabel, ThinkingIndicator, StreamingText, MessageBubble, ConfidenceIndicator, FeedbackControl.
 - `src/patterns/assistant/`: the scripted assistant engine and its safety rules (with tests).
@@ -52,14 +52,26 @@ The assistant demo is **scripted, not a real model**.
 
 ## Brand
 
-The Davy Designs mark is a single traced vector (`src/components/core/logoPath.ts`) drawn by `<Logo>`.
-Pick the colour for the surface it sits on: `primary` (page or card), `brand` (headers, heroes),
-`secondary` (footers), `inverse` (on brand-blue fills). Every option follows light/dark mode and uses
-a token that is already in the contrast contract. Use `decorative` when the brand name is announced
-next to it, and `showName` for the lockup. App icon, adaptive icon, favicon and splash in `assets/`
-are generated from the same vector (white mark on brand blue `#2557BD`).
+**Finsta** is the product's identity. `<Logo>` draws it as a traced vector in three cuts: `horizontal`
+(headers), `stacked` (hero areas, as designed) and `mark` (tight spaces). Pick the colour for the surface
+it sits on: `primary` (page or card), `brand` (hero areas), `secondary` (footers), `inverse` (on brand-blue
+fills). Each follows light/dark mode and uses a token already in the contrast contract. App icon, adaptive
+icon, favicon and splash in `assets/` are generated from the same vector (white mark on brand blue `#2557BD`).
+
+**Davy Designs** is the designer. Its mark appears only through `<DesignedBy />`, a quiet credit line.
+
+| Where the credit goes | Where it must not go |
+|---|---|
+| Home footer, an About or credits page, the social preview card, the README | The app header or any primary brand slot |
+| | The app icon, favicon or splash screen |
+| | Product screens that simulate a bank or handle money: accounts, transfers, assistant, insights, fraud alerts, AI settings |
+| | AI labels and disclosures, banners, errors, or anywhere a customer is deciding something |
+
+Why: those places carry the *product's* identity and the customer's trust. A designer's mark there reads as
+the product's own branding. A test (`src/dev/brandPlacement.test.ts`) fails if the credit appears outside the
+allowed places.
 
 ## Licence
 
-Code: MIT (see `LICENSE`). The Davy Designs name, logo and the files derived from it are **not**
+Code: MIT (see `LICENSE`). The Finsta and Davy Designs names, logos and the files derived from them are **not**
 covered by that licence and are all rights reserved: see `NOTICE.md`.

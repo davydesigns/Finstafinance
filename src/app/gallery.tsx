@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 
-import { Button, Card, Logo, Row, Stack, Text, type ButtonSize, type ButtonVariant, type CardPadding, type CardVariant, type LogoColor, type TextColor, type Tone } from '@/components/core';
+import { Button, Card, DesignedBy, Logo, Row, Stack, Text, type ButtonSize, type ButtonVariant, type CardPadding, type CardVariant, type LogoColor, type LogoVariant, type TextColor, type Tone } from '@/components/core';
 import { GalleryScreen, Section } from '@/gallery/GalleryScreen';
 import { ThemeSwitcher } from '@/gallery/ThemeSwitcher';
 import { useTheme, type LogoSize, type TextVariant } from '@/theme';
@@ -14,9 +14,14 @@ const CARD_VARIANTS: CardVariant[] = ['default', 'elevated', 'outlined'];
 const CARD_PADDINGS: CardPadding[] = ['sm', 'md', 'xl'];
 
 const LOGO_SIZES: LogoSize[] = ['small', 'medium', 'large'];
+const LOGO_VARIANTS: { variant: LogoVariant; note: string }[] = [
+  { variant: 'horizontal', note: 'headers and toolbars' },
+  { variant: 'stacked', note: 'hero areas and cards' },
+  { variant: 'mark', note: 'tight spaces, avatars, app icons' },
+]
 const LOGO_COLORS: { color: LogoColor; note: string }[] = [
   { color: 'primary', note: 'Default. Ink on the page or a card.' },
-  { color: 'brand', note: 'Brand blue, for headers and hero areas.' },
+  { color: 'brand', note: 'Brand blue, for hero areas.' },
   { color: 'secondary', note: 'Quiet, for footers.' },
 ];
 
@@ -34,8 +39,20 @@ export default function DesignSystemGallery() {
       </Stack>
 
       {/* LOGO */}
-      <Section title="Logo: sizes" note="A vector, so it stays sharp at any size and adapts to light and dark.">
-        <Row gap={6} wrap>
+      <Section title="Logo: variants" note="Finsta is the product's identity. A vector, so it stays sharp at any size and adapts to light and dark.">
+        <Stack gap={5}>
+          {LOGO_VARIANTS.map(({ variant, note }) => (
+            <Stack key={variant} gap={1}>
+              <Logo variant={variant} size="large" />
+              <Text variant="caption" color="secondary">
+                {variant}: {note}
+              </Text>
+            </Stack>
+          ))}
+        </Stack>
+      </Section>
+      <Section title="Logo: sizes">
+        <Row gap={6} wrap align="end">
           {LOGO_SIZES.map((size) => (
             <Logo key={size} size={size} />
           ))}
@@ -52,15 +69,15 @@ export default function DesignSystemGallery() {
             </Stack>
           ))}
           <View style={{ backgroundColor: colors.action.primary, borderRadius: radius.lg, padding: space[5] }}>
-            <Logo color="inverse" showName />
+            <Logo color="inverse" size="large" />
           </View>
           <Text variant="caption" color="secondary">
             inverse: for filled brand surfaces.
           </Text>
         </Stack>
       </Section>
-      <Section title="Logo: with name" note="The group is announced once as 'Davy Designs'. The visible text isn't read twice.">
-        <Logo showName size="large" color="brand" />
+      <Section title="Designer credit" note="A quiet line for footers and credits pages. Never in the header, app icon, product screens, money flows, AI labels or alerts.">
+        <DesignedBy />
       </Section>
 
       {/* TEXT */}

@@ -22,6 +22,7 @@ export interface Strings {
     debit: string;
     types: { purchase: string; transfer: string; fee: string; refund: string; subscription: string };
   };
+  brand: { designedBy: string };
   ai: {
     /** Always shown with generated content. Words, never an icon alone. */
     label: string;
@@ -76,6 +77,7 @@ export const defaultStrings: Strings = {
     debit: 'Money out',
     types: { purchase: 'Purchase', transfer: 'Transfer', fee: 'Fee', refund: 'Refund', subscription: 'Subscription' },
   },
+  brand: { designedBy: 'Designed by' },
   ai: {
     label: 'AI-generated',
     labelShort: 'AI',

@@ -1,7 +1,7 @@
 import { Link, type Href } from 'expo-router';
 import { Pressable } from 'react-native';
 
-import { Card, Screen, Stack, Text } from '@/components/core';
+import { Card, DesignedBy, Screen, Stack, Text } from '@/components/core';
 import { useTheme } from '@/theme';
 
 const ENTRIES: { href: Href; title: string; subtitle: string }[] = [
@@ -44,6 +44,10 @@ export default function GalleryHome() {
               </Pressable>
             </Link>
           ))}
+        </Stack>
+        {/* The credit lives here, in the footer: quiet, and away from every product screen. */}
+        <Stack style={{ marginTop: space[6] }}>
+          <DesignedBy />
         </Stack>
       </Stack>
     </Screen>

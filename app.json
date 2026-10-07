@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Davy Designs",
+    "name": "Finsta",
     "slug": "fintech-ds",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -22,9 +22,9 @@
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/favicon.png",
-      "name": "Davy Designs: Fintech Design System",
-      "shortName": "Davy Designs",
-      "description": "A production-quality React Native fintech design system: tokens, light and dark themes, accessible components and patterns. Built by Davy Designs.",
+      "name": "Finsta: Fintech Design System",
+      "shortName": "Finsta",
+      "description": "Finsta: a production-quality React Native fintech design system with tokens, light and dark themes, accessible components and AI patterns. Designed by Davy Designs.",
       "themeColor": "#2557BD",
       "backgroundColor": "#F6F8FB"
     },

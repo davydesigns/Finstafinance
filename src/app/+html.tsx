@@ -7,9 +7,9 @@ import type { PropsWithChildren } from 'react';
  * Set SITE_URL to the final public address (social previews need an absolute image URL).
  */
 const SITE_URL = 'https://finstafinance.vercel.app';
-const TITLE = 'Davy Designs: Fintech Design System';
+const TITLE = 'Finsta: Fintech Design System';
 const DESCRIPTION =
-  'A production-quality React Native fintech design system: tokens, light and dark themes, accessible components and patterns. Built by Davy Designs.';
+  'Finsta: a production-quality React Native fintech design system with tokens, light and dark themes, accessible components and AI patterns. Designed by Davy Designs.';
 
 export default function Root({ children }: PropsWithChildren) {
   return (
@@ -23,13 +23,13 @@ export default function Root({ children }: PropsWithChildren) {
         <meta name="color-scheme" content="light dark" />
 
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Davy Designs" />
+        <meta property="og:site_name" content="Finsta" />
         <meta property="og:title" content={TITLE} />
         <meta property="og:description" content={DESCRIPTION} />
         <meta property="og:image" content={`${SITE_URL}/og.png`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="Davy Designs logo with the title Fintech Design System" />
+        <meta property="og:image:alt" content="Finsta logo with the title Fintech Design System, designed by Davy Designs" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={TITLE} />
         <meta name="twitter:description" content={DESCRIPTION} />

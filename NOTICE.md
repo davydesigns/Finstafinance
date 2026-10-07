@@ -6,17 +6,21 @@ The source code in this repository is released under the MIT License (see `LICEN
 
 ## Brand assets are not included in that licence
 
-The **Davy Designs name and logo**, and every file derived from the logo artwork, are
-© 2026 Davy Designs. **All rights reserved.** They are not licensed for reuse, even though
-they are stored in this repository.
+Two sets of brand assets are stored in this repository. **Neither is licensed for reuse**, even though
+the files are here. All rights are reserved by davydesigns (Davy Designs).
+
+- **Finsta**: the name and logo (the house, bar-chart and circuit mark, and the "Finsta" wordmark).
+- **Davy Designs**: the name and logo (the interlocking "CC" mark) used for the designer credit.
 
 Covered files:
 
 - `assets/` (app icon, adaptive icons, favicon, splash image)
-- `src/components/core/logoPath.ts` (the traced logo artwork)
+- `public/og.png` (the social preview card)
+- `src/components/core/finstaLogoPath.ts` (the traced Finsta artwork)
+- `src/components/core/designerLogoPath.ts` (the traced Davy Designs artwork)
 
-You may read, study and run the project, and you may use the `Logo` *component's code* as a
-pattern. If you reuse this code, replace the artwork in the two places above with your own.
+You may read, study and run the project, and you may use the `Logo` and `DesignedBy` components' *code*
+as a pattern. If you reuse this code, replace the artwork in the files above with your own.
 
 ## Third-party
 
