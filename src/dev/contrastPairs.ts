@@ -88,4 +88,14 @@ export const contrastPairs: ContrastPair[] = [
   { label: 'Confidence high on AI tint', fg: (c) => c.confidence.high.text, bg: (c) => c.ai.subtle, min: 4.5 },
   { label: 'Confidence medium on AI tint', fg: (c) => c.confidence.medium.text, bg: (c) => c.ai.subtle, min: 4.5 },
   { label: 'Confidence low on AI tint', fg: (c) => c.confidence.low.text, bg: (c) => c.ai.subtle, min: 4.5 },
+  // Banner action buttons sit on every status tint
+  { label: 'Action on success tint', fg: (c) => c.action.primary, bg: (c) => c.status.success.background, min: 4.5 },
+  { label: 'Action on warning tint', fg: (c) => c.action.primary, bg: (c) => c.status.warning.background, min: 4.5 },
+  { label: 'Action on danger tint', fg: (c) => c.action.primary, bg: (c) => c.status.danger.background, min: 4.5 },
+  { label: 'Action on info tint', fg: (c) => c.action.primary, bg: (c) => c.status.info.background, min: 4.5 },
+  { label: 'Action on neutral tint', fg: (c) => c.action.primary, bg: (c) => c.status.neutral.background, min: 4.5 },
+  { label: 'Link on success tint', fg: (c) => c.text.link, bg: (c) => c.status.success.background, min: 4.5 },
+  { label: 'Focus ring on warning tint', fg: (c) => c.border.focus, bg: (c) => c.status.warning.background, min: 3 },
+  { label: 'Focus ring on danger tint', fg: (c) => c.border.focus, bg: (c) => c.status.danger.background, min: 3 },
+  { label: 'Secondary button border on tints (danger)', fg: (c) => c.action.primary, bg: (c) => c.status.danger.background, min: 3 },
 ];

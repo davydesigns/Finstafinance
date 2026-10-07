@@ -59,21 +59,30 @@ export interface IconProps extends ColorChoice {
 }
 
 /**
- * Decorative icon. It is hidden from screen readers on purpose: the meaning
- * must always be carried by nearby text, so nobody depends on the glyph.
- * The font loads on first use; nothing in the app needs to wait for it.
+ * INTERNAL: an icon in an already-resolved colour (for colours that are not text roles, such as
+ * confidence levels). `Icon` is the public face.
  */
-export function Icon({ name, size = 'medium', color, tone }: IconProps) {
-  const { colors, iconSize } = useTheme();
+export function IconBase({ name, size = 'medium', colorValue }: { name: IconName; size?: IconSize; colorValue: string }) {
+  const { iconSize } = useTheme();
   // The server can't load the icon font, so it builds an empty box. The browser's first render must match it.
   if (!useHydrated()) return <View style={{ width: iconSize[size], height: iconSize[size] }} />;
   return (
     <Ionicons
       name={GLYPHS[name]}
       size={iconSize[size]}
-      color={resolveTextColor(colors, { color, tone })}
+      color={colorValue}
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
     />
   );
+}
+
+/**
+ * Decorative icon. It is hidden from screen readers on purpose: the meaning
+ * must always be carried by nearby text, so nobody depends on the glyph.
+ * The font loads on first use; nothing in the app needs to wait for it.
+ */
+export function Icon({ name, size = 'medium', color, tone }: IconProps) {
+  const { colors } = useTheme();
+  return <IconBase name={name} size={size} colorValue={resolveTextColor(colors, { color, tone })} />;
 }

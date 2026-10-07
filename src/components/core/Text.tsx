@@ -6,7 +6,7 @@ import type { TextLayoutStyle } from './layoutStyle';
 
 /** Text colour ROLES. Status meaning is a separate prop, `tone`. */
 export type TextColor = 'primary' | 'secondary' | 'disabled' | 'inverse' | 'link';
-export type Tone = 'success' | 'warning' | 'danger' | 'info' | 'neutral';
+export type Tone = 'success' | 'warning' | 'danger' | 'info' | 'neutral' | 'ai';
 
 export interface ColorChoice {
   color?: TextColor;
@@ -23,6 +23,7 @@ const ROLE: Record<TextColor, (c: SemanticColors) => string> = {
 };
 
 export function resolveTextColor(colors: SemanticColors, { color = 'primary', tone }: ColorChoice): string {
+  if (tone === 'ai') return colors.ai.accent;
   return tone ? colors.status[tone].text : ROLE[color](colors);
 }
 

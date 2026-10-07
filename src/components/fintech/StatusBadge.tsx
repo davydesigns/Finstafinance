@@ -9,7 +9,7 @@ export type BadgeStatus = 'success' | 'warning' | 'danger' | 'neutral' | 'pendin
  * Each status has its own colour AND its own icon shape AND a text label,
  * so it still reads for colour-blind users and in greyscale.
  */
-const CONFIG: Record<BadgeStatus, { icon: IconName; tone: Tone }> = {
+const CONFIG: Record<BadgeStatus, { icon: IconName; tone: Exclude<Tone, 'ai'> }> = {
   success: { icon: 'checkmark-circle', tone: 'success' },
   warning: { icon: 'warning', tone: 'warning' },
   danger: { icon: 'close-circle', tone: 'danger' },
