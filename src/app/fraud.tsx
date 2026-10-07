@@ -3,6 +3,7 @@ import { AccessibilityInfo, Platform } from 'react-native';
 
 import { Banner, Button, Screen, Stack, Text } from '@/components/core';
 import { FraudAlertCard, HumanHandoff } from '@/components/fintech';
+import { DemoNotice } from '@/gallery/DemoNotice';
 import { money } from '@/utils/money';
 
 /**
@@ -28,6 +29,7 @@ export default function Fraud() {
     <Screen>
       <Stack gap={4}>
         <Text variant="heading1">Security</Text>
+        <DemoNotice>This alert is a fixed example. No fraud system is running and no card is ever locked.</DemoNotice>
 
         {outcome === 'pending' ? (
           <FraudAlertCard

@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { Banner, Card, Disclosure, Screen, SegmentedControl, Stack, Text } from '@/components/core';
 import { DataUseRow } from '@/components/fintech';
+import { DemoNotice } from '@/gallery/DemoNotice';
 
 /**
  * PATTERN: AI and data controls. Each use of data is explained in plain words, shows its state in
@@ -31,6 +32,7 @@ export default function AiSettings() {
     <Screen>
       <Stack gap={5}>
         <Text variant="heading1">AI and data controls</Text>
+        <DemoNotice>These switches only change this page. No data is collected, stored or erased.</DemoNotice>
         <Banner tone="ai" title="You decide what AI can use">
           Anything new starts off. You can change these at any time, and erasing never affects your accounts.
         </Banner>

@@ -4,6 +4,7 @@ import { AccessibilityInfo, KeyboardAvoidingView, Platform, ScrollView, Text as 
 import { FeedbackControl, MessageBubble, ThinkingIndicator } from '@/components/ai';
 import { Banner, Button, Chip, Row, Stack } from '@/components/core';
 import { ActionProposalCard, HumanHandoff } from '@/components/fintech';
+import { DemoNotice } from '@/gallery/DemoNotice';
 import { useStrings } from '@/i18n';
 import { INITIAL_STATE, respond, type Proposal, type Reply } from '@/patterns/assistant/engine';
 import { useTheme } from '@/theme';
@@ -139,6 +140,7 @@ export default function Assistant() {
       <View style={{ flex: 1, width: '100%', maxWidth: size.maxReadableWidth }}>
         {/* Always visible, never dismissible: the customer must always know it's AI and how to reach a person. */}
         <View style={{ padding: space[4], gap: space[3] }}>
+          <DemoNotice>This assistant is scripted to show the interface patterns. No AI model, real account or real money is involved.</DemoNotice>
           <Banner tone="ai" title={strings.ai.disclosure.title}>
             {strings.ai.disclosure.body}
           </Banner>
