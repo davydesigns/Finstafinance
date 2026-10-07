@@ -47,6 +47,10 @@ export const contrastPairs: ContrastPair[] = [
   { label: 'Focus ring on background', fg: (c) => c.border.focus, bg: (c) => c.background.primary, min: 3 },
   // Combinations components actually produce (added by accessibility audit)
   { label: 'Action label on subtle tint (pressed secondary button)', fg: (c) => c.action.primary, bg: (c) => c.action.subtle, min: 4.5 },
+  { label: 'Secondary text on background (secondary)', fg: (c) => c.text.secondary, bg: (c) => c.background.secondary, min: 4.5 },
+  { label: 'Link on background (secondary)', fg: (c) => c.text.link, bg: (c) => c.background.secondary, min: 4.5 },
+  { label: 'Success on background (secondary)', fg: (c) => c.status.success.text, bg: (c) => c.background.secondary, min: 4.5 },
+  { label: 'Danger on background (secondary)', fg: (c) => c.status.danger.text, bg: (c) => c.background.secondary, min: 4.5 },
   { label: 'Primary text on pressed surface', fg: (c) => c.text.primary, bg: (c) => c.surface.pressed, min: 4.5 },
   { label: 'Secondary text on pressed surface', fg: (c) => c.text.secondary, bg: (c) => c.surface.pressed, min: 4.5 },
   { label: 'Success on pressed surface', fg: (c) => c.status.success.text, bg: (c) => c.surface.pressed, min: 4.5 },

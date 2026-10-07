@@ -5,6 +5,7 @@
  */
 export const palette = {
   white: '#FFFFFF',
+  black: '#000000',
 
   // Calm blue: brand / primary actions
   blue50: '#EEF4FF',
@@ -54,6 +55,15 @@ export const palette = {
   neutral800: '#262E3C',
   neutral900: '#171C27',
   neutral950: '#0E121A',
+
+  // Mist: the one cool blue-grey the Soft style (2.0) is made from. Page and surfaces share it,
+  // so cards read as pushed out of the page rather than laid on it. Measured, not eyeballed:
+  // see `src/dev/depthLegibility.test.ts`.
+  mist100: '#E0E6EF',
+  mist200: '#D2DAE6',
+  mist300: '#C2CCDC',
+  /** The ink of Soft's dark shadow. Used with an alpha, never as a fill. */
+  mistShade: '#7C8EAB',
 
   // Red: errors, failed payments
   red50: '#FDECEC',

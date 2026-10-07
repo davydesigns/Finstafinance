@@ -2,8 +2,10 @@
 // may import it (enforced by ESLint), so components can only use semantic tokens.
 export { space } from './spacing';
 export type { SpaceToken } from './spacing';
-export { radius } from './radius';
+export { radius, softRadius } from './radius';
 export type { RadiusToken } from './radius';
+export { cleanDepth, softDepth, depthWhen, withAlpha } from './depth';
+export type { Depth, DepthInk, DepthStyle, Ink } from './depth';
 export { typography, typographyVariants } from './typography';
 export type { TypeStyle, TypeVariant, TextVariant, MoneyVariant } from './typography';
 export { borderWidth } from './border';

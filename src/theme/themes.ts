@@ -1,8 +1,9 @@
 import { palette as p } from './tokens/color';
+import { cleanDepth, softDepth, type Depth, type DepthInk } from './tokens/depth';
 import { elevation } from './tokens/elevation';
 import { borderWidth } from './tokens/border';
 import { controlHeight, touchTarget } from './tokens/interaction';
-import { radius } from './tokens/radius';
+import { radius, softRadius, type RadiusToken } from './tokens/radius';
 import { motion } from './tokens/motion';
 import { iconSize, logoHeight, size } from './tokens/size';
 import { space } from './tokens/spacing';
@@ -168,16 +169,59 @@ const dark: SemanticColors = {
   },
 };
 
+/**
+ * SOFT colours (2.0). Soft is a second STYLE, not a second brand: it keeps every role, hue and
+ * contrast pair of Clean and changes only the material. Page and surfaces share one colour
+ * (that is what makes a card look pushed out of the page), and the pressed surface is a notch
+ * darker (pressed in). Status, action and AI colours are untouched, so meaning never changes.
+ */
+const softLight: SemanticColors = {
+  ...light,
+  background: { primary: p.mist100, secondary: p.mist200 },
+  surface: { primary: p.mist100, elevated: p.mist100, pressed: p.mist200, accent: p.blue50 },
+  border: { ...light.border, default: p.mist300 },
+};
+
+const softDark: SemanticColors = {
+  ...dark,
+  background: { primary: p.neutral800, secondary: p.neutral900 },
+  surface: { primary: p.neutral800, elevated: p.neutral800, pressed: p.neutral900, accent: p.blue900 },
+  // The neutral badge would otherwise match the page exactly.
+  status: { ...dark.status, neutral: { text: p.neutral200, background: p.neutral900 } },
+};
+
+/**
+ * The two inks of Soft's shadows. Light mode: a near-white highlight and a blue-grey shade.
+ * Dark mode: a faint white highlight and a black shade (the highlight can only be subtle there).
+ * Alphas are tuned so each ink clears the legibility floor in `src/dev/depthLegibility.test.ts`.
+ */
+const softLightInk: DepthInk = {
+  light: { color: p.white, alpha: 0.9 },
+  shade: { color: p.mistShade, alpha: 0.5 },
+};
+const softDarkInk: DepthInk = {
+  light: { color: p.white, alpha: 0.08 },
+  shade: { color: p.black, alpha: 0.55 },
+};
+
+/** `light` / `dark`: the colour scheme. */
 export type ThemeName = 'light' | 'dark';
+/** `clean` / `soft`: the visual style. Independent of the scheme, so there are four themes. */
+export type StyleName = 'clean' | 'soft';
 
 export interface Theme {
   name: ThemeName;
+  style: StyleName;
   colors: SemanticColors;
   space: typeof space;
-  radius: typeof radius;
+  radius: Record<RadiusToken, number>;
   typography: typeof typography;
   borderWidth: typeof borderWidth;
   elevation: typeof elevation;
+  /** How surfaces sit on the page, by role. Components read this instead of branching on `style`. */
+  depth: Depth;
+  /** The shadow inks behind `depth`, kept as numbers so they can be measured. `null` in Clean. */
+  depthInk: DepthInk | null;
   touchTarget: number;
   controlHeight: typeof controlHeight;
   size: typeof size;
@@ -186,7 +230,17 @@ export interface Theme {
   motion: typeof motion;
 }
 
-const shared = { space, radius, typography, borderWidth, elevation, touchTarget, controlHeight, size, iconSize, logoHeight, motion };
+const shared = { space, typography, borderWidth, elevation, touchTarget, controlHeight, size, iconSize, logoHeight, motion };
 
-export const lightTheme: Theme = { name: 'light', colors: light, ...shared };
-export const darkTheme: Theme = { name: 'dark', colors: dark, ...shared };
+export const lightTheme: Theme = { name: 'light', style: 'clean', colors: light, radius, depth: cleanDepth, depthInk: null, ...shared };
+export const darkTheme: Theme = { name: 'dark', style: 'clean', colors: dark, radius, depth: cleanDepth, depthInk: null, ...shared };
+export const softLightTheme: Theme = { name: 'light', style: 'soft', colors: softLight, radius: softRadius, depth: softDepth(softLightInk), depthInk: softLightInk, ...shared };
+export const softDarkTheme: Theme = { name: 'dark', style: 'soft', colors: softDark, radius: softRadius, depth: softDepth(softDarkInk), depthInk: softDarkInk, ...shared };
+
+/** All four themes. The contrast contract runs against every one of them. */
+export const allThemes: readonly Theme[] = [lightTheme, darkTheme, softLightTheme, softDarkTheme];
+
+export function themeFor(name: ThemeName, style: StyleName): Theme {
+  if (style === 'soft') return name === 'dark' ? softDarkTheme : softLightTheme;
+  return name === 'dark' ? darkTheme : lightTheme;
+}

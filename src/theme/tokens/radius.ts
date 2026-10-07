@@ -9,3 +9,13 @@ export const radius = {
 } as const;
 
 export type RadiusToken = keyof typeof radius;
+
+/** Soft is rounder: soft shadows look wrong around tight corners. Same names, bigger values. */
+export const softRadius: Record<RadiusToken, number> = {
+  none: 0,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 32,
+  full: 9999,
+};

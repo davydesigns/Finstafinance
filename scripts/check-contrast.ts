@@ -1,10 +1,10 @@
 import { contrastPairs } from '../src/dev/contrastPairs';
-import { darkTheme, lightTheme } from '../src/theme/themes';
+import { allThemes } from '../src/theme/themes';
 import { contrastRatio } from '../src/utils/contrast';
 
 let failures = 0;
-for (const theme of [lightTheme, darkTheme]) {
-  console.log(`\n${theme.name.toUpperCase()}`);
+for (const theme of allThemes) {
+  console.log(`\n${theme.style.toUpperCase()} ${theme.name.toUpperCase()}`);
   for (const pair of contrastPairs) {
     const ratio = contrastRatio(pair.fg(theme.colors), pair.bg(theme.colors));
     const ok = ratio >= pair.min;

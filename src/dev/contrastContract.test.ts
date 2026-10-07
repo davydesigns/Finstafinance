@@ -1,12 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { darkTheme, lightTheme, type SemanticColors } from '@/theme/themes';
+import { allThemes, type SemanticColors } from '@/theme/themes';
 import { contrastRatio } from '@/utils/contrast';
 
 import { contrastPairs } from './contrastPairs';
 
-describe.each([lightTheme, darkTheme])('contrast contract: $name theme', (theme) => {
+describe.each(allThemes.map((theme) => [`${theme.style} ${theme.name}`, theme] as const))('contrast contract: %s theme', (_label, theme) => {
   it.each(contrastPairs.map((pair) => [pair.label, pair] as const))('%s', (_label, pair) => {
     const ratio = contrastRatio(pair.fg(theme.colors), pair.bg(theme.colors));
     expect(ratio).toBeGreaterThanOrEqual(pair.min);

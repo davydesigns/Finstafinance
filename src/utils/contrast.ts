@@ -29,3 +29,14 @@ export function wcagLevel(ratio: number): WcagLevel {
   if (ratio >= 4.5) return 'AA';
   return 'Fail';
 }
+
+/** The colour you actually see when `color` at `alpha` (0 to 1) is painted over `base`. */
+export function compositeOver(color: string, alpha: number, base: string): string {
+  const parse = (hex: string) => {
+    const n = parseInt(hex.replace('#', ''), 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  };
+  const [c, b] = [parse(color), parse(base)];
+  const mixed = c.map((value, i) => Math.round(value * alpha + b[i] * (1 - alpha)));
+  return `#${mixed.map((value) => value.toString(16).padStart(2, '0')).join('').toUpperCase()}`;
+}
