@@ -4,6 +4,7 @@ import { Card, Row, Stack, Text } from '@/components/core';
 import { TextBase } from '@/components/core/Text';
 import { contrastPairs } from '@/dev/contrastPairs';
 import { GalleryScreen, Section } from '@/gallery/GalleryScreen';
+import { DepthRoles } from '@/gallery/DepthRoles';
 import { ThemeSwitcher } from '@/gallery/ThemeSwitcher';
 import { typographyVariants, useTheme } from '@/theme';
 import { contrastRatio, wcagLevel } from '@/utils/contrast';
@@ -203,9 +204,14 @@ export default function Foundations() {
       <Section title="Spacing">
         <SpacingRamp />
       </Section>
-      <Section title="Radius and elevation">
+      <Section title="Radius and elevation" note="Radius values follow the style: Soft is rounder. Elevation is Clean's shadow scale.">
         <Card variant="default">
           <RadiusAndElevation />
+        </Card>
+      </Section>
+      <Section title="Depth roles" note="Components ask for a role; the style (Clean or Soft) decides how it looks. Switch style above to compare.">
+        <Card variant="default">
+          <DepthRoles />
         </Card>
       </Section>
     </GalleryScreen>

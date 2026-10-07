@@ -24,6 +24,7 @@ function ThemedStack() {
           options={{ title: 'Finsta', headerTitle: () => <Logo size="small" color="primary" /> }}
         />
         <Stack.Screen name="accounts" options={{ title: 'Accounts' }} />
+        <Stack.Screen name="soft" options={{ title: 'Soft (2.0)' }} />
         <Stack.Screen name="foundations" options={{ title: 'Foundations' }} />
         <Stack.Screen name="gallery" options={{ title: 'Gallery' }} />
         <Stack.Screen name="fintech" options={{ title: 'Fintech components' }} />

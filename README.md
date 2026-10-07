@@ -40,8 +40,18 @@ npm run check            # typecheck + lint + tests (run before every commit)
 ## Quality gates (`npm test`)
 
 - Money formatting and parsing unit tests.
-- Contrast contract: every foreground/background pair meets WCAG AA in both themes, **and** every colour token a component reads must appear in a pair (or be listed as exempt).
+- Contrast contract: every foreground/background pair meets WCAG AA in all four themes (Clean and Soft, light and dark), **and** every colour token a component reads must appear in a pair (or be listed as exempt).
+- Soft style: shadows are never the only signal (edges, fills and state under Soft), and the shadows themselves have a measured legibility floor.
 - Accessibility behaviour: labels, roles, states, loading/disabled, error announcements.
+
+## Styles: Clean and Soft (2.0)
+
+Finsta has two visual styles, chosen independently of light and dark. **Clean** (1.x) is flat and edge-led.
+**Soft** (2.0) is accessible neumorphism: surfaces are pushed out of the page and fields pressed into it,
+with a real edge or fill kept wherever meaning depends on one. Components ask for a depth *role*
+(`surface`, `floating`, `control`, `field`, `pressed`) and the theme decides the shadow, so no component
+branches on the style. Soft steps aside to Clean when the device asks for more contrast. Open any page with
+`?style=soft` to see it. Full reasoning, evidence and limits: `docs/soft/01-accessible-neumorphism.md`.
 
 ## AI in banking
 
